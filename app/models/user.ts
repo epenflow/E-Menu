@@ -1,9 +1,9 @@
-import type ROLES from '#enums/roles'
+import ROLES from '#enums/roles'
 import { DbAccessTokensProvider, type AccessToken } from '@adonisjs/auth/access_tokens'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { compose } from '@adonisjs/core/helpers'
 import hash from '@adonisjs/core/services/hash'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -38,4 +38,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
     tokenSecretLength: 40,
   })
   currentAccessToken?: AccessToken
+
+  @computed()
+  get isAdmin() {
+    return this.role === ROLES.ADMIN
+  }
 }
