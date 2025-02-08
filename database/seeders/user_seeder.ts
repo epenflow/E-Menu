@@ -4,7 +4,8 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    // await UserFactory.merge({ username: 'ADMIN', password: 'admin' }).create()
-    await UserFactory.merge({ role: ROLES.CASHIER }).createMany(100)
+    await UserFactory.merge({ username: 'admin', password: 'admin' }).create()
+    await UserFactory.merge({ role: ROLES.CASHIER }).createMany(5)
+    await UserFactory.merge({ role: ROLES.ADMIN }).createMany(2)
   }
 }
