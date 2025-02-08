@@ -25,7 +25,7 @@ export default class AuthController {
    * @throws {ValidationException} - If the request data fails validation.
    * @throws {AuthenticationException} - If the user credentials are invalid.
    */
-  async signIn({ request }: HttpContext) {
+  async signIn({ request, response }: HttpContext) {
     /**
      * Validates the sign-in request data.
      *
@@ -52,9 +52,9 @@ export default class AuthController {
      */
     const token = await User.accessTokens.create(user, ['*'])
 
-    return {
+    return response.json({
       user: user.toJSON(),
       token: token.toJSON(),
-    }
+    })
   }
 }

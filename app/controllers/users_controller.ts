@@ -6,7 +6,7 @@ export default class UsersController {
   /**
    * Display a list of resource
    */
-  async index({ bouncer, request }: HttpContext) {
+  async index({ bouncer, request, response }: HttpContext) {
     await bouncer.with('UserPolicy').denies('isAdmin')
 
     const page = request.input('page', 1)
@@ -14,60 +14,68 @@ export default class UsersController {
 
     const user = await User.query().select('*').paginate(page, limit)
 
-    return user
+    return response.json({
+      ...user.toJSON(),
+    })
   }
 
   /**
    * Handle form submission for the create action
    */
-  async store({ request, bouncer }: HttpContext) {
+  async store({ request, bouncer, response }: HttpContext) {
     await bouncer.with('UserPolicy').denies('isAdmin')
 
     const data = await storeUserValidator.validate(request.all())
     const user = await User.create(data)
 
-    return user.toJSON()
+    return response.json({
+      ...user.toJSON(),
+    })
   }
 
   /**
    * Show individual record
    */
-  async show({ params, bouncer }: HttpContext) {
+  async show({ params, bouncer, response }: HttpContext) {
     await bouncer.with('UserPolicy').denies('isAdmin')
 
     const user = await User.findOrFail(params.id)
 
-    return user.toJSON()
+    return response.json({
+      ...user.toJSON(),
+    })
   }
 
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request, bouncer }: HttpContext) {
+  async update({ params, request, bouncer, response }: HttpContext) {
     await bouncer.with('UserPolicy').denies('isAdmin')
 
     const data = await updateUserValidator.validate(request.all())
     const user = await User.findOrFail(params.id)
 
-    return user.merge(data)
+    return response.json({
+      ...user.merge(data).toJSON(),
+    })
   }
 
   /**
    * Delete record
    */
-  async destroy({ params, bouncer }: HttpContext) {
+  async destroy({ params, bouncer, response }: HttpContext) {
     await bouncer.with('UserPolicy').denies('isAdmin')
 
     const user = await User.findOrFail(params.id)
     await user.delete()
 
-    return {
+    return response.json({
       success: [
         {
           message: 'Ok',
           status: true,
         },
       ],
-    }
+    })
   }
 }
