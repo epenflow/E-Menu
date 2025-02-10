@@ -115,6 +115,14 @@ test.group('User Management', (group) => {
 
     response.assertStatus(200)
     response.assertBodyContains(data)
+
+    const db = await client
+      .get(baseURL + '/' + user.id)
+      .withGuard('api')
+      .loginAs(user)
+
+    db.assertStatus(200)
+    db.assertBodyContains(data)
   })
 
   test('fail : non-admin role cannot update the user', async ({ client }) => {

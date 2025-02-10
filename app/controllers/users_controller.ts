@@ -52,11 +52,18 @@ export default class UsersController {
   async update({ params, request, bouncer, response }: HttpContext) {
     await bouncer.with('UserPolicy').denies('isAdmin')
 
-    const data = await updateUserValidator.validate(request.all())
+    const data = await updateUserValidator.validate(request.all(), {
+      meta: {
+        userId: params.id,
+      },
+    })
     const user = await User.findOrFail(params.id)
 
+    user.merge(data)
+    user.save()
+
     return response.json({
-      ...user.merge(data).toJSON(),
+      ...user.toJSON(),
     })
   }
 
