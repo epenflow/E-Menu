@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react'
 import { buttonVariants } from '~/components/ui/button'
 import For from '~/components/utility/for'
 import { cn } from '~/lib/utils'
@@ -24,8 +25,18 @@ export default function () {
         </ul>
 
         <ul className="flex items-center gap-2.5">
-          <For each={['Sign-in', 'Demo']}>
-            {(char, key) => (
+          <For
+            each={
+              [
+                { href: '/auth/sign-in', title: 'Sign-in' },
+                { href: '/demo', title: 'Demo' },
+              ] satisfies Array<{
+                title: string
+                href: string
+              }>
+            }
+          >
+            {(value, key) => (
               <li
                 key={key}
                 className={cn(
@@ -33,7 +44,7 @@ export default function () {
                   'text-xs font-medium'
                 )}
               >
-                {char}
+                <Link href={value.href}>{value.title}</Link>
               </li>
             )}
           </For>
