@@ -20,6 +20,9 @@ router
     router.get('sign-in', [AuthController, 'showSignIn']).as('show.sign_in')
     router.post('sign-in', [AuthController, 'handleSignIn']).as('handle.sign_in')
 
+    router.get('sign-up', [AuthController, 'showSignUp']).as('show.sign_up')
+    router.post('sign-up', [AuthController, 'handleSignUp']).as('handle.sign_up')
+
     router
       .get('sign-out', [AuthController, 'handleSignOut'])
       .use(middleware.auth({ guards: ['web'] }))

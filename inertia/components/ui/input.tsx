@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { cn } from '~/lib/utils'
-import Button, { buttonVariants } from './button'
+import Button from './button'
 
 type InputProps = React.ComponentProps<'input'>
 const Input: React.FC<InputProps> = ({ className, type, ...props }) => {
@@ -64,31 +64,3 @@ export const InputPassword = React.forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
-type InputIconProps = React.ComponentProps<'div'>
-export const InputIcon: React.FC<InputIconProps> = ({ className, ...props }) => {
-  return (
-    <div
-      className={cn(
-        buttonVariants({ variant: 'ghost', size: 'sm' }),
-        'hover:bg-transparent',
-        'absolute top-1/2 -translate-y-1/2 left-0',
-        className
-      )}
-      {...props}
-    />
-  )
-}
-type InputErrorProps = React.ComponentProps<'p'> & {
-  error?: string
-}
-export const InputError: React.FC<InputErrorProps> = ({ className, error, ...props }) => {
-  return error ? (
-    <p
-      className={cn(
-        'text-destructive text-sm transition-opacity ease-in-out duration-500 delay-75',
-        error ? 'opacity-100' : 'opacity-0'
-      )}
-      {...props}
-    />
-  ) : null
-}

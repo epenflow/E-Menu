@@ -1,7 +1,6 @@
-import type { SignInValidator } from '#validators/auth'
+import type { SignUpValidator } from '#validators/auth'
 import { Link, useForm } from '@inertiajs/react'
 import { LockIcon, Plus, UserIcon } from 'lucide-react'
-import { toast } from 'sonner'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +15,7 @@ import AuthLayout from '~/layouts/auth-layout'
 import { cn } from '~/lib/utils'
 
 export default function () {
-  const { data, setData, post, processing, errors, reset } = useForm<SignInValidator>({
+  const { data, setData, post, processing, errors, reset } = useForm<SignUpValidator>({
     username: '',
     password: '',
   })
@@ -25,12 +24,10 @@ export default function () {
     e.preventDefault()
     e.stopPropagation()
 
-    post('sign-in', {
+    post('sign-up', {
       onSuccess: () => reset(),
       onError: (error) => {
-        if ('E_INVALID_CREDENTIALS' in error) {
-          toast.error(error.E_INVALID_CREDENTIALS)
-        }
+        console.log(error)
       },
     })
   }
@@ -50,7 +47,7 @@ export default function () {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/auth/sign-in">Sign in</BreadcrumbLink>
+                <BreadcrumbLink href="/auth/sign-up">Sign up</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -92,17 +89,9 @@ export default function () {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label htmlFor="password" className={cn(errors.password && 'text-destructive')}>
-                  Password
-                </Label>
-                <Link
-                  href="/auth/forgot-password"
-                  className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <Label htmlFor="password" className={cn(errors.password && 'text-destructive')}>
+                Password
+              </Label>
               <div className="relative">
                 <div
                   className={cn(
@@ -157,12 +146,12 @@ export default function () {
             </div>
 
             <p className="text-center text-sm text-muted-foreground mt-6">
-              <span>Don't have an account?&nbsp;</span>
+              <span>Already have account?&nbsp;</span>
               <Link
-                href="/auth/sign-up"
+                href="/auth/sign-in"
                 className="text-sm text-foreground underline-offset-4 hover:underline"
               >
-                Sign up
+                Sign in
               </Link>
             </p>
           </form>
