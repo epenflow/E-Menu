@@ -26,6 +26,7 @@ export default class AuthController {
     const data = await signUpValidator.validate(ctx.request.all())
 
     await User.create(data)
+    ctx.session.flash('success', 'Your account has been created successfully!')
 
     ctx.response.redirect().toRoute('show.sign_in')
   }

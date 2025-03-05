@@ -26,10 +26,8 @@ export default class ProfilesController {
     const { password } = await ctx.request.validateUsing(destroyProfileValidator)
 
     const user = await User.verifyCredentials(ctx.auth.user!.email, password)
-    await ctx.auth.use('web').logout()
-    await user.delete()
 
-    ctx.session.flash('success', 'Delete user successfully')
+    await user.delete()
 
     return ctx.response.redirect().toRoute('show.profile')
   }
