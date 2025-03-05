@@ -1,7 +1,7 @@
 import { Text } from '~/components/ui/typography'
 import ContainerLayout, { InnerContainerLayout } from '../container-layout'
 
-export default function () {
+const AppFooter = () => {
   return (
     <ContainerLayout className="h-fit">
       <InnerContainerLayout className="flex items-center justify-center py-4">
@@ -12,3 +12,4 @@ export default function () {
     </ContainerLayout>
   )
 }
+export default AppFooter

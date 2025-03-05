@@ -1,18 +1,28 @@
 import { ThemeProvider } from 'next-themes'
-import type React from 'react'
+import React from 'react'
 import { Toaster } from '~/components/ui/sonner'
+import FlashMessage from '~/components/utility/flash-message'
 
-export default function ({ children }: React.PropsWithChildren) {
-  return (
+type RootLayoutProps = React.PropsWithChildren
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+  const [isClient, setClient] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    setClient(true)
+  }, [setClient])
+
+  return isClient ? (
     <>
-      <Toaster />
+      <Toaster richColors />
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
       />
+      <FlashMessage />
       {children}
     </>
-  )
+  ) : null
 }
+export default RootLayout

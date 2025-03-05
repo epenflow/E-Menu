@@ -9,12 +9,10 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-router.on('/').renderInertia('home', {
-  title: 'Test',
-})
+
+router.on('/').renderInertia('home').as('home')
 
 const AuthController = () => import('#controllers/auth_controller')
-
 router
   .group(() => {
     router.get('sign-in', [AuthController, 'showSignIn']).as('show.sign_in')
@@ -31,8 +29,24 @@ router
   .prefix('auth')
 
 router
-  .on('/test')
-  .renderInertia('test')
+  .on('/dashboard')
+  .renderInertia('dashboard')
+  .use(
+    middleware.auth({
+      guards: ['web'],
+    })
+  )
+  .as('dashboard')
+
+const ProfilesController = () => import('#controllers/profiles_controller')
+router
+  .group(() => {
+    router.get('profile', [ProfilesController, 'showProfile']).as('show.profile')
+
+    router.patch('profile/update', [ProfilesController, 'handleUpdateProfile'])
+    router.delete('profile/destroy', [ProfilesController, 'handleDestroy'])
+  })
+  .prefix('settings')
   .use(
     middleware.auth({
       guards: ['web'],

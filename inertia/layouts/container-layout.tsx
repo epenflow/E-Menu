@@ -3,7 +3,7 @@ import Pattern from '~/components/ui/pattern'
 import { cn } from '~/lib/utils'
 
 type ContainerLayoutProps = React.ComponentProps<'section'>
-export default function ({ className, children, ...props }: ContainerLayoutProps) {
+const ContainerLayout: React.FC<ContainerLayoutProps> = ({ className, children, ...props }) => {
   return (
     <section
       className={cn(
@@ -18,7 +18,7 @@ export default function ({ className, children, ...props }: ContainerLayoutProps
     </section>
   )
 }
-
+export default ContainerLayout
 type InnerContainerLayoutProps = React.ComponentProps<'article'>
 export const InnerContainerLayout: React.FC<InnerContainerLayoutProps> = ({
   className,

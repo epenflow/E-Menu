@@ -64,6 +64,9 @@
   --polka-color: var(--border);
   --polka-size: 1px;
   --polka-space: 10px 10px;
+
+  --dashboard-header-offset: calc(1px + --spacing(14));
+  --dashboard-container-height: calc(100dvh - var(--dashboard-header-offset));
 }
 
 .dark {
@@ -143,6 +146,7 @@
   --- Custom Style ---
   */
   --height-container: var(--container-height);
+  --height-dashboard-container: var(--dashboard-container-height);
 }
 
 @layer base {

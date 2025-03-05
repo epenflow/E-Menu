@@ -7,13 +7,15 @@ export default class AuthController {
     return ctx.inertia.render('auth/sign-in')
   }
   async handleSignIn(ctx: HttpContext) {
-    const { username, password } = await signInValidator.validate(ctx.request.all())
+    const { email, password } = await signInValidator.validate(ctx.request.all())
 
-    const user = await User.verifyCredentials(username, password)
+    const user = await User.verifyCredentials(email, password)
 
     await ctx.auth.use('web').login(user)
 
-    ctx.response.redirect('/test')
+    ctx.session.flash('success', `Welcome back ${user.username}!`)
+
+    ctx.response.redirect().toRoute('dashboard')
   }
 
   showSignUp(ctx: HttpContext) {
@@ -31,6 +33,6 @@ export default class AuthController {
   async handleSignOut(ctx: HttpContext) {
     await ctx.auth.use('web').logout()
 
-    return ctx.response.redirect('/')
+    return ctx.response.redirect().toRoute('home')
   }
 }

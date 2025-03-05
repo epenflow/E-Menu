@@ -3,7 +3,7 @@ import { cn } from '~/lib/utils'
 import RootLayout from './root-layout'
 
 type AuthLayoutProps = React.ComponentProps<'main'>
-export default function ({ className, ...props }: AuthLayoutProps) {
+const AuthLayout: React.FC<AuthLayoutProps> = ({ className, ...props }) => {
   return (
     <RootLayout>
       <main
@@ -13,3 +13,4 @@ export default function ({ className, ...props }: AuthLayoutProps) {
     </RootLayout>
   )
 }
+export default AuthLayout

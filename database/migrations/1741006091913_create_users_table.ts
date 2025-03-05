@@ -9,7 +9,10 @@ export default class extends BaseSchema {
         .uuid('id', { primaryKey: true, useBinaryUuid: true })
         .defaultTo(this.raw(/* sql */ `uuid_generate_v4()`))
 
+      table.string('f_name', 100).nullable()
+      table.string('l_name', 100).nullable()
       table.string('username', 100).unique().notNullable()
+      table.string('email', 150).unique().notNullable()
       table.text('password').notNullable()
 
       table.timestamps(true)

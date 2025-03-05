@@ -1,4 +1,6 @@
+import { router } from '@inertiajs/react'
 import { clsx, type ClassValue } from 'clsx'
+import React from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export const cn: (...args: ClassValue[]) => string = (...args) => {
@@ -19,3 +21,16 @@ export const disableReactDevTools = () => {
     }
   }
 }
+
+const extendedClickEvent = <C extends (...args: any[]) => any>(callback: C) => {
+  return <T = MouseEvent>(event: React.MouseEvent<T, MouseEvent>) => {
+    event.stopPropagation()
+    callback(event)
+  }
+}
+export const signOut = extendedClickEvent(() => {
+  router.get('/auth/sign-out')
+})
+export const destroyProfile = extendedClickEvent(() => {
+  router.get('profile/destroy')
+})

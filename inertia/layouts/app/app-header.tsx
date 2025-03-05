@@ -3,7 +3,7 @@ import { buttonVariants } from '~/components/ui/button'
 import For from '~/components/utility/for'
 import { cn } from '~/lib/utils'
 
-export default function () {
+const AppHeader = () => {
   return (
     <header className={cn('sticky top-0 w-full z-50 bg-card', 'border-b border-dashed')}>
       <nav className="container border-x border-dashed h-12 flex items-center justify-between">
@@ -53,3 +53,4 @@ export default function () {
     </header>
   )
 }
+export default AppHeader
