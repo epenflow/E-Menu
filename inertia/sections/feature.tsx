@@ -48,6 +48,7 @@ export default function () {
         </div>
 
         <Pattern pattern="polka" />
+        <span className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-card to-transparent via-card" />
       </InnerContainerLayout>
     </ContainerLayout>
   )
