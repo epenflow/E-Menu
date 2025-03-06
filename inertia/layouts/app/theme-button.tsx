@@ -1,9 +1,11 @@
 import { Laptop, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import Button from '~/components/ui/button'
+import type React from 'react'
+import Button, { type ButtonProps } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 
-const ThemeButton = () => {
+type ThemeButtonProps = ButtonProps
+const ThemeButton: React.FC<ThemeButtonProps> = ({ className, ...props }) => {
   const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
@@ -17,41 +19,39 @@ const ThemeButton = () => {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-foreground capitalize hidden md:block">{theme}</span>
-      <Button
-        onClick={toggleTheme}
-        variant="ghost"
-        size="icon"
-        aria-label="Toggle theme"
-        className="relative size-7"
-      >
-        <Sun
-          className={cn(
-            `absolute transition-all duration-500`,
-            theme === 'light' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-          )}
-        />
+    <Button
+      onClick={toggleTheme}
+      variant="ghost"
+      size="icon"
+      aria-label="Toggle theme"
+      className={cn('relative size-7', className)}
+      {...props}
+    >
+      <Sun
+        className={cn(
+          `absolute transition-all duration-500`,
+          theme === 'light' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        )}
+      />
 
-        <Moon
-          className={cn(
-            `absolute transition-all duration-500`,
-            theme === 'dark' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-          )}
-        />
+      <Moon
+        className={cn(
+          `absolute transition-all duration-500`,
+          theme === 'dark' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        )}
+      />
 
-        <Laptop
-          className={cn(
-            `absolute transition-all duration-500`,
-            theme === 'system' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-          )}
-        />
+      <Laptop
+        className={cn(
+          `absolute transition-all duration-500`,
+          theme === 'system' ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        )}
+      />
 
-        <span className="sr-only">
-          {theme === 'light' ? 'Light mode' : theme === 'dark' ? 'Dark mode' : 'System mode'}
-        </span>
-      </Button>
-    </div>
+      <span className="sr-only">
+        {theme === 'light' ? 'Light mode' : theme === 'dark' ? 'Dark mode' : 'System mode'}
+      </span>
+    </Button>
   )
 }
 export default ThemeButton

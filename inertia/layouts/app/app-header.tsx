@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react'
 import { buttonVariants } from '~/components/ui/button'
 import For from '~/components/utility/for'
 import { cn } from '~/lib/utils'
+import ThemeButton from './theme-button'
 
 const AppHeader = () => {
   return (
@@ -25,11 +26,14 @@ const AppHeader = () => {
         </ul>
 
         <ul className="flex items-center gap-2.5">
+          <li className="inline-flex items-center">
+            <ThemeButton className="size-8" />
+          </li>
           <For
             each={
               [
-                { href: '/auth/sign-in', title: 'Sign-in' },
                 { href: '/demo', title: 'Demo' },
+                { href: '/auth/sign-in', title: 'Sign-in' },
               ] satisfies Array<{
                 title: string
                 href: string
@@ -40,7 +44,7 @@ const AppHeader = () => {
               <li
                 key={key}
                 className={cn(
-                  buttonVariants({ variant: key % 2 === 0 ? 'default' : 'outline', size: 'sm' }),
+                  buttonVariants({ variant: key % 2 === 1 ? 'default' : 'outline', size: 'sm' }),
                   'text-xs font-medium'
                 )}
               >
