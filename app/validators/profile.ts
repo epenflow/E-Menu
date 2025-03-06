@@ -1,6 +1,10 @@
 import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 import type { Infer } from '@vinejs/vine/types'
 
+vine.messagesProvider = new SimpleMessagesProvider({
+  'username.regex':
+    'The username field can only contain lowercase letters, numbers, underscores, or periods',
+})
 export const updateProfileValidator = vine
   .withMetaData<{
     id?: string
@@ -19,7 +23,8 @@ export const updateProfileValidator = vine
             .where('username', value)
             .first()
           return !user
-        }),
+        })
+        .maxLength(100),
       email: vine
         .string()
         .email()
@@ -30,7 +35,8 @@ export const updateProfileValidator = vine
             .where('email', value)
             .first()
           return !user
-        }),
+        })
+        .maxLength(100),
     })
   )
 export type UpdateProfileValidator = Infer<typeof updateProfileValidator>
@@ -40,8 +46,8 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'newPassword.required': 'The new password field must be defined',
   'newPassword.confirmed': 'The new password field and confirm password field must be the same',
   'newPassword.regex':
-    'The new password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-  'newPassword.minLength': 'The new password must be at least {{ min }} characters long',
+    'The new password field must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+  'newPassword.minLength': 'The new password field must be at least {{ min }} characters long',
 })
 
 export const updateProfilePasswordValidator = vine.compile(
