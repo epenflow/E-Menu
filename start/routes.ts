@@ -45,6 +45,7 @@ router
     router.get('password', [ProfilesController, 'showPassword']).as('show.password')
 
     router.patch('profile/update', [ProfilesController, 'handleUpdateProfile'])
+    router.patch('profile/update-password', [ProfilesController, 'handleUpdatePassword'])
     router.delete('profile/destroy', [ProfilesController, 'handleDestroy'])
   })
   .prefix('settings')

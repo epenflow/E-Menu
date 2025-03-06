@@ -10,7 +10,7 @@ import SettingLayout from '~/layouts/setting-layout'
 export default function () {
   const { breadcrumbs } = resources
 
-  const { data, setData, errors, processing, patch } = useForm({
+  const { data, setData, errors, processing, patch, reset } = useForm({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
@@ -18,7 +18,9 @@ export default function () {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    patch('profile/update-password')
+    patch('profile/update-password', {
+      onSuccess: () => reset(),
+    })
   }
 
   return (
