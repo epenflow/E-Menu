@@ -22,6 +22,10 @@ export default class ProfilesController {
     return ctx.response.redirect().toRoute('show.profile')
   }
 
+  showPassword(ctx: HttpContext) {
+    return ctx.inertia.render('settings/password')
+  }
+
   async handleDestroy(ctx: HttpContext) {
     const { password } = await ctx.request.validateUsing(destroyProfileValidator)
 

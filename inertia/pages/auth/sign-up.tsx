@@ -100,7 +100,7 @@ export default function () {
                   id="lName"
                   type="text"
                   className="pl-10"
-                  placeholder="john"
+                  placeholder="doe"
                   value={data.lName}
                   onChange={(event) => setData('lName', event.target.value)}
                   autoComplete="username"
@@ -156,7 +156,7 @@ export default function () {
 
           <div className="space-y-2">
             <Label htmlFor="email" className={cn(errors.email && 'text-destructive')}>
-              email
+              Email
             </Label>
             <div className="relative">
               <div
@@ -172,7 +172,7 @@ export default function () {
                 id="email"
                 className="pl-10"
                 type="email"
-                placeholder="johndoe@example.com"
+                placeholder="email@example.com"
                 value={data.email}
                 onChange={(event) => setData('email', event.target.value)}
                 autoComplete="email"

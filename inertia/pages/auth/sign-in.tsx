@@ -65,7 +65,7 @@ export default function ({ ...props }: SharedProps) {
                 id="email"
                 type="email"
                 className="pl-10"
-                placeholder="johndoe@example.com"
+                placeholder="email@example.com"
                 value={data.email}
                 onChange={(event) => setData('email', event.target.value)}
                 autoComplete="email"

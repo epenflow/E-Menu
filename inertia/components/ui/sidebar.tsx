@@ -34,6 +34,8 @@ type SidebarContext = {
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
+  variant: 'sidebar' | 'floating' | 'inset'
+  setVariant: React.Dispatch<React.SetStateAction<'sidebar' | 'floating' | 'inset'>>
 }
 
 const SidebarContext = React.createContext<SidebarContext | null>(null)
@@ -51,6 +53,7 @@ function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  variant = 'sidebar',
   className,
   style,
   children,
@@ -59,9 +62,11 @@ function SidebarProvider({
   defaultOpen?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  variant?: 'sidebar' | 'floating' | 'inset'
 }) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
+  const [_variant, setVariant] = React.useState<'sidebar' | 'floating' | 'inset'>(variant)
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -113,8 +118,10 @@ function SidebarProvider({
       openMobile,
       setOpenMobile,
       toggleSidebar,
+      variant: _variant,
+      setVariant,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, _variant, setVariant]
   )
 
   return (
@@ -144,17 +151,15 @@ function SidebarProvider({
 
 function Sidebar({
   side = 'left',
-  variant = 'sidebar',
   collapsible = 'offcanvas',
   className,
   children,
   ...props
 }: React.ComponentProps<'div'> & {
   side?: 'left' | 'right'
-  variant?: 'sidebar' | 'floating' | 'inset'
   collapsible?: 'offcanvas' | 'icon' | 'none'
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { isMobile, state, openMobile, setOpenMobile, variant } = useSidebar()
 
   if (collapsible === 'none') {
     return (

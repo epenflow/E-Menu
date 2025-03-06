@@ -1,6 +1,7 @@
 import type React from 'react'
 import type { ScrollAreaProps } from '~/components/ui/scroll-area'
 import ScrollArea from '~/components/ui/scroll-area'
+import { useSidebar } from '~/components/ui/sidebar'
 import { cn } from '~/lib/utils'
 
 type DashboardContainerProps = ScrollAreaProps & {
@@ -11,10 +12,16 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({
   className,
   ...props
 }) => {
+  const { variant } = useSidebar()
+
   if (scrollable) {
     return (
       <ScrollArea
-        className={cn('h-dashboard-container px-4 max-h-dashboard-container')}
+        className={cn(
+          variant === 'inset' &&
+            'md:[--dashboard-container-height:var(--dashboard-container-height-inset)]',
+          'h-dashboard-container px-4 max-h-dashboard-container'
+        )}
         {...props}
       />
     )

@@ -42,6 +42,7 @@ const ProfilesController = () => import('#controllers/profiles_controller')
 router
   .group(() => {
     router.get('profile', [ProfilesController, 'showProfile']).as('show.profile')
+    router.get('password', [ProfilesController, 'showPassword']).as('show.password')
 
     router.patch('profile/update', [ProfilesController, 'handleUpdateProfile'])
     router.delete('profile/destroy', [ProfilesController, 'handleDestroy'])

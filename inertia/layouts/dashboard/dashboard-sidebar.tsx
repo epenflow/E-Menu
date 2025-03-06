@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react'
 import { ChevronsUpDown, LogOut, Settings, Utensils } from 'lucide-react'
 import React from 'react'
 import UserInfo from '~/components/base/user-info'
+import { buttonVariants } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +23,7 @@ import {
   useSidebar,
 } from '~/components/ui/sidebar'
 import { useIsMobile } from '~/hooks/use-mobile'
-import { signOut } from '~/lib/utils'
+import { cn, signOut } from '~/lib/utils'
 
 const DashboardSidebar = () => {
   return (
@@ -32,11 +33,11 @@ const DashboardSidebar = () => {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <div className="bg-sidebar-foreground text-sidebar flex aspect-square size-8 items-center justify-center rounded-md">
-                  <Utensils className="size-5" />
+                <div className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }), 'size-7')}>
+                  <Utensils />
                 </div>
-                <div className="ml-1 grid flex-1 text-left text-sm">
-                  <span className="mb-0.5 truncate leading-none font-semibold">E-Menu</span>
+                <div className="grid flex-1 text-left text-sm">
+                  <span className="truncate leading-none font-medium">E-Menu</span>
                 </div>
               </Link>
             </SidebarMenuButton>

@@ -11,9 +11,9 @@ type DashboardLayoutProps = React.PropsWithChildren & {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, breadcrumbs }) => {
   return (
     <RootLayout>
-      <SidebarProvider>
+      <SidebarProvider variant="inset">
         <DashboardSidebar />
-        <SidebarInset>
+        <SidebarInset className="overflow-clip">
           <DashboardHeader breadcrumbs={breadcrumbs} />
           {children}
         </SidebarInset>

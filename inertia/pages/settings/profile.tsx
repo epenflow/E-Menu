@@ -6,10 +6,12 @@ import DeleteUser from '~/components/base/delete-user'
 import Button from '~/components/ui/button'
 import Input from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
+import { Block, Heading, Text } from '~/components/ui/typography'
 import DashboardLayout from '~/layouts/dashboard-layout'
 import SettingLayout from '~/layouts/setting-layout'
 
 export default function ({ ...props }: SharedProps) {
+  const { breadcrumbs } = resources
   const { data, setData, errors, processing, patch } = useForm<UpdateProfileValidator>({
     email: props.user?.email || '',
     username: props.user?.username || '',
@@ -23,19 +25,16 @@ export default function ({ ...props }: SharedProps) {
   }
 
   return (
-    <DashboardLayout
-      breadcrumbs={[
-        {
-          title: 'Settings',
-          href: '#',
-        },
-        {
-          title: 'Profile',
-        },
-      ]}
-    >
+    <DashboardLayout breadcrumbs={breadcrumbs}>
       <SettingLayout>
         <div className="max-w-xl space-y-6">
+          <Block className="gap-1 mb-6">
+            <Heading level={3} className="font-medium">
+              Update profile
+            </Heading>
+            <Text>Update your account's profile information and email address.</Text>
+          </Block>
+
           <form className="space-y-4" onSubmit={submit}>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-2">
@@ -89,4 +88,16 @@ export default function ({ ...props }: SharedProps) {
       </SettingLayout>
     </DashboardLayout>
   )
+}
+
+const resources = {
+  breadcrumbs: [
+    {
+      title: 'Settings',
+      href: '#',
+    },
+    {
+      title: 'Profile',
+    },
+  ],
 }

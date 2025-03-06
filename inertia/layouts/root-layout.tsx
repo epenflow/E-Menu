@@ -13,15 +13,11 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
 
   return isClient ? (
     <>
-      <Toaster richColors />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      />
-      <FlashMessage />
-      {children}
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <Toaster richColors />
+        {children}
+        <FlashMessage />
+      </ThemeProvider>
     </>
   ) : null
 }

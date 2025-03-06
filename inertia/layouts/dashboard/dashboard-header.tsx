@@ -9,7 +9,9 @@ import {
 } from '~/components/ui/breadcrumb'
 import { SidebarTrigger } from '~/components/ui/sidebar'
 import For from '~/components/utility/for'
+import { cn } from '~/lib/utils'
 import type { BreadcrumbItem as TBreadcrumbItem } from '~/types'
+import ThemeButton from '../app/theme-button'
 
 type DashboardHeaderProps = {
   breadcrumbs: TBreadcrumbItem[]
@@ -42,10 +44,13 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ breadcrumbs }) => {
   )
 
   return (
-    <header className="bg-card border-b top-0 sticky z-50">
-      <nav className="flex h-14 items-center px-4 gap-4">
-        <SidebarTrigger />
-        {showBreadcrumbs}
+    <header className={cn('bg-card border-b top-0 sticky z-50')}>
+      <nav className="flex h-14 items-center px-4 gap-4 justify-between">
+        <section className="flex items-center gap-4">
+          <SidebarTrigger />
+          {showBreadcrumbs}
+        </section>
+        <ThemeButton />
       </nav>
     </header>
   )

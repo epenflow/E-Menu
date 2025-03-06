@@ -66,6 +66,9 @@
   --polka-space: 10px 10px;
 
   --dashboard-header-offset: calc(1px + --spacing(14));
+  --dashboard-container-height-inset: calc(
+    100dvh - calc(var(--dashboard-header-offset) + --spacing(4))
+  );
   --dashboard-container-height: calc(100dvh - var(--dashboard-header-offset));
 }
 
