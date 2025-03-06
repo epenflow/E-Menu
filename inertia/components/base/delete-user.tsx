@@ -1,6 +1,5 @@
 import { useForm } from '@inertiajs/react'
 import React from 'react'
-import { toast } from 'sonner'
 import Button from '../ui/button'
 import {
   Dialog,
@@ -34,12 +33,7 @@ const DeleteUser = () => {
     destroy('profile/destroy', {
       preserveScroll: true,
       onSuccess: () => closeModal(),
-      onError: (error) => {
-        if ('E_INVALID_CREDENTIALS' in error) {
-          toast.error(error.E_INVALID_CREDENTIALS)
-        }
-        localRef.current?.focus()
-      },
+      onError: () => localRef.current?.focus(),
       onFinish: () => reset(),
     })
   }

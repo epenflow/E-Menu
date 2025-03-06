@@ -1,7 +1,6 @@
-import User from '#models/user'
 import { destroyProfileValidator, updateProfileValidator } from '#validators/profile'
-import type { HttpContext } from '@adonisjs/core/http'
-
+import { type HttpContext } from '@adonisjs/core/http'
+import hash from '@adonisjs/core/services/hash'
 export default class ProfilesController {
   showProfile(ctx: HttpContext) {
     return ctx.inertia.render('settings/profile')
@@ -29,10 +28,18 @@ export default class ProfilesController {
   async handleDestroy(ctx: HttpContext) {
     const { password } = await ctx.request.validateUsing(destroyProfileValidator)
 
-    const user = await User.verifyCredentials(ctx.auth.user!.email, password)
+    if (!(await hash.verify(ctx.auth.user!.password, password))) {
+      ctx.session.flashErrors({
+        password: 'Invalid user credentials',
+      })
 
-    await user.delete()
+      return ctx.response.redirect().toRoute('show.profile')
+    } else {
+      await ctx.auth.user?.delete()
 
-    return ctx.response.redirect().toRoute('show.profile')
+      ctx.session.flash('success', 'Delete user successfully!')
+
+      return ctx.response.redirect().toRoute('show.sign_in')
+    }
   }
 }
