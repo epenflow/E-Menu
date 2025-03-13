@@ -21,16 +21,14 @@ export const paginationSchema = z.object({
 export type PaginationSchema = z.infer<typeof paginationSchema>;
 
 const usePagination = (
-  routeId: RouteGen.FileRouteTypes["to"],
+  routeId: RouteGen.FileRouteTypes["id"],
   paginator: Paginator,
 ): {
   hasNextPage: boolean;
   hasPrevPage: boolean;
-  setNextPage: VoidFunction;
-  setPrevPage: VoidFunction;
   setOrder: OrderFunction;
-  handleNextPage: EventFunction;
-  handlePrevPage: EventFunction;
+  onNextPage: EventFunction;
+  onPrevPage: EventFunction;
 } => {
   const routeApi = React.useMemo(() => getRouteApi(routeId), [routeId]);
   const search = routeApi.useSearch();
@@ -49,22 +47,6 @@ const usePagination = (
     [paginator.nextPageUrl],
   );
 
-  const setNextPage = React.useCallback(() => {
-    navigate({
-      search: () => ({
-        page: hasNextPage ? paginator.lastPage : pagination.page + 1,
-      }),
-    });
-  }, [pagination.page, navigate, hasNextPage, paginator.lastPage]);
-
-  const setPrevPage = React.useCallback(() => {
-    navigate({
-      search: () => ({
-        page: hasPrevPage ? paginator.firstPage : pagination.page - 1,
-      }),
-    });
-  }, [pagination.page, navigate, hasPrevPage, paginator.firstPage]);
-
   const setOrder = React.useCallback(
     (order: Order) => {
       navigate({
@@ -76,30 +58,36 @@ const usePagination = (
     [navigate],
   );
 
-  const handleNextPage = useEventCallback(
+  const onNextPage = useEventCallback(
     <T = HTMLElement>(e: React.MouseEvent<T>) => {
       e.preventDefault();
       e.stopPropagation();
-      setNextPage();
+      navigate({
+        search: () => ({
+          page: hasNextPage ? paginator.lastPage : pagination.page + 1,
+        }),
+      });
     },
   );
 
-  const handlePrevPage = useEventCallback(
+  const onPrevPage = useEventCallback(
     <T = HTMLElement>(e: React.MouseEvent<T>) => {
       e.preventDefault();
       e.stopPropagation();
-      setPrevPage();
+      navigate({
+        search: () => ({
+          page: hasPrevPage ? paginator.firstPage : pagination.page - 1,
+        }),
+      });
     },
   );
 
   return {
     hasNextPage,
     hasPrevPage,
-    setNextPage,
-    setPrevPage,
     setOrder,
-    handleNextPage,
-    handlePrevPage,
+    onNextPage,
+    onPrevPage,
   };
 };
 export default usePagination;

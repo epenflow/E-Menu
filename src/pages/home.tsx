@@ -2,10 +2,11 @@ import { Link } from "@tanstack/react-router";
 
 const Home = () => {
   return (
-    <div className="inline-flex gap-2">
+    <section>
       <p>Home</p>
-      <Link to="/test">Test</Link>
-    </div>
+      <Link to="/sign-in">sign in</Link>
+    </section>
   );
 };
+
 export default Home;

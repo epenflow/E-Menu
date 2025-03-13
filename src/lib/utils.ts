@@ -1,4 +1,6 @@
+import { clsx, type ClassValue } from "clsx";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 export const withMemo: <T>(
   Component: T,
@@ -17,3 +19,7 @@ export const disableReactDevTools: VoidFunction = () => {
     }
   }
 };
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}

@@ -3,12 +3,12 @@ import { queryOptions } from "@tanstack/react-query";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import type { QueryFunctionContext } from "@tanstack/react-query";
 import { paginationSchema, type PaginationSchema } from "~/hooks/pagination";
-import http from "./http";
+import api from "./api";
 import type { PaginateResponse } from "./types";
 
 export const paginateProductQueryFn = async (ctx: QueryFunctionContext) => {
   const params = paginationSchema.parse(ctx.meta);
-  const { data } = await http.get<
+  const { data } = await api.get<
     PaginateResponse<
       {
         id: string;

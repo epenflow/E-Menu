@@ -4,15 +4,17 @@ import For from "~/components/utils/for";
 import usePagination from "~/hooks/pagination";
 import { productsQueryOptions } from "~/lib/test";
 
-const routeApi = getRouteApi("/test");
-const Test = () => {
+const routeApi = getRouteApi("/_private/dashboard");
+const Dashboard = () => {
   const { limit, page } = routeApi.useSearch();
   const search = routeApi.useSearch();
   const {
     data: { data, meta: paginator },
   } = useSuspenseQuery(productsQueryOptions(search));
-  const { handleNextPage, handlePrevPage, hasNextPage, hasPrevPage } =
-    usePagination("/test", paginator);
+  const { onNextPage, onPrevPage, hasNextPage, hasPrevPage } = usePagination(
+    "/_private/dashboard",
+    paginator,
+  );
 
   return (
     <div>
@@ -24,17 +26,17 @@ const Test = () => {
         <button
           className={hasNextPage ? "text-destructive" : "text-primary"}
           disabled={hasNextPage}
-          onClick={handleNextPage}>
+          onClick={onNextPage}>
           next
         </button>
         <button
           className={hasPrevPage ? "text-destructive" : "text-primary"}
           disabled={hasPrevPage}
-          onClick={handlePrevPage}>
+          onClick={onPrevPage}>
           prev
         </button>
       </div>
-      <div className="grid grid-cols-4 gap-2 container">
+      <div className="grid grid-cols-4  gap-2 container">
         <For each={data}>
           {(value, key) => (
             <div
@@ -53,4 +55,4 @@ const Test = () => {
     </div>
   );
 };
-export default Test;
+export default Dashboard;

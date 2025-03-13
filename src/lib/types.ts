@@ -14,3 +14,11 @@ export type PaginateResponse<T = undefined> = {
   meta: Paginator;
   data: T;
 };
+export type AuthToken = {
+  type: string;
+  name: string | null;
+  token: string | undefined;
+  abilities: string[];
+  lastUsedAt: Date | null;
+  expiresAt: Date | null;
+};
