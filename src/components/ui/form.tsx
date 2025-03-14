@@ -62,7 +62,7 @@ export const FormLabel: React.FC<LabelProps> = ({ className, ...props }) => {
   const { hasError, formItemId } = useFormItem();
   return (
     <Label
-      id={formItemId}
+      htmlFor={formItemId}
       className={cn(hasError && "text-destructive", className)}
       {...props}
     />

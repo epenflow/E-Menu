@@ -20,6 +20,27 @@ export const disableReactDevTools: VoidFunction = () => {
   }
 };
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+export const cn = (...args: ClassValue[]) => {
+  return twMerge(clsx(args));
+};
+
+export const serialize: <T>(value: T) => string = (value) =>
+  JSON.stringify(value);
+export const deserialize = <T>(value: string): T | undefined => {
+  try {
+    const parse: T = JSON.parse(value);
+    return parse;
+  } catch (error) {
+    console.error("Error parse JSON", error);
+    return undefined;
+  }
+};
+export const assertIsDefined: <T>(
+  data?: T | null,
+) => asserts data is Exclude<T, null | undefined> = <T>(data?: T | null) => {
+  if (data === null || typeof data === "undefined") {
+    throw new Error(
+      `Assertion failed: data is ${data === null ? "null" : "undefined"}`,
+    );
+  }
+};

@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Lock, Mail } from "lucide-react";
+import { Lock, User } from "lucide-react";
 import React from "react";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Input, InputPassword } from "~/components/ui/input";
 import useEventCallback from "~/hooks/event-callback";
-import { useSignInForm } from "~/lib/auth/sign-in";
+import { useSignInForm } from "~/lib/services/auth";
+
 import { cn } from "~/lib/utils";
 
 const SignInForm = () => {
@@ -20,21 +21,21 @@ const SignInForm = () => {
     <form onSubmit={onSubmit} className="space-y-6 grid">
       <div className="space-y-6">
         <signInForm.AppField
-          name="email"
+          name="username"
           children={(field) => (
             <field.FormItem>
               <field.FormLabel>Username</field.FormLabel>
-              <field.FormFieldWithIcon Icon={Mail}>
+              <field.FormFieldWithIcon Icon={User}>
                 <field.FormControl>
                   <Input
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="email@example.com"
+                    placeholder="example"
                   />
                 </field.FormControl>
               </field.FormFieldWithIcon>
               <field.FormDescription>
-                Enter your registered email address.
+                Enter your username.
               </field.FormDescription>
               <field.FormMessage />
             </field.FormItem>

@@ -4,9 +4,8 @@ import For from "~/components/utils/for";
 import usePagination from "~/hooks/pagination";
 import { productsQueryOptions } from "~/lib/test";
 
-const routeApi = getRouteApi("/_private/dashboard");
 const Dashboard = () => {
-  const { limit, page } = routeApi.useSearch();
+  const { routeApi } = resources;
   const search = routeApi.useSearch();
   const {
     data: { data, meta: paginator },
@@ -19,8 +18,8 @@ const Dashboard = () => {
   return (
     <div>
       <Link to="/">Back</Link>
-      <p>{page}</p>
-      <p>{limit}</p>
+      <p>{search.page}</p>
+      <p>{search.limit}</p>
 
       <div className="flex gap-2 text-sm font-medium">
         <button
@@ -56,3 +55,6 @@ const Dashboard = () => {
   );
 };
 export default Dashboard;
+const resources = {
+  routeApi: getRouteApi("/_private/dashboard"),
+};

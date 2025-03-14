@@ -22,3 +22,19 @@ export type AuthToken = {
   lastUsedAt: Date | null;
   expiresAt: Date | null;
 };
+
+export type User<T = undefined> = {
+  id: string;
+  username: string;
+  createdAt: Date;
+  updatedAt: Date;
+  roleId: number;
+} & T;
+
+export type Role = {
+  id: string;
+  name: string;
+  abilities: string[];
+  createdAt: Date;
+  updatedAt: Date;
+};

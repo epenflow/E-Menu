@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { zodValidator } from "@tanstack/zod-adapter";
-import { paginationSchema } from "~/hooks/pagination";
-import { productsQueryOptions } from "~/lib/test";
-import Dashboard from "~/pages/dashboard";
+import { Button } from "~/components/ui/button";
+import { useAuth } from "~/lib/services/auth";
 
 export const Route = createFileRoute("/_private/dashboard")({
-  component: Dashboard,
-  validateSearch: zodValidator(paginationSchema),
-  loaderDeps: (deps) => deps,
-  loader: ({ deps, context }) => {
-    return context.query.ensureQueryData(productsQueryOptions(deps.search));
-  },
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  const { signOut } = useAuth();
+  return (
+    <div>
+      <Button onClick={signOut}>sign - out</Button>
+    </div>
+  );
+}

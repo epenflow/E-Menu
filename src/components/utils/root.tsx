@@ -4,13 +4,22 @@ import React from "react";
 import type { Root } from "react-dom/client";
 import query from "~/lib/query";
 import router from "~/lib/router";
+import { AuthContextProvider, useAuth } from "~/lib/services/auth";
+
+const RouterWithContext = () => {
+  const auth = useAuth();
+
+  return <RouterProvider router={router({ query, auth })} />;
+};
 
 const Root = () => {
   const InnerRoot = () => {
     return (
       <>
         <QueryClientProvider client={query}>
-          <RouterProvider router={router({ query })} />
+          <AuthContextProvider>
+            <RouterWithContext />
+          </AuthContextProvider>
         </QueryClientProvider>
       </>
     );
