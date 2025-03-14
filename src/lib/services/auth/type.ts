@@ -8,7 +8,7 @@ export type SignInResponse = {
 };
 export type SignInSchema = z.infer<typeof signInSchema>;
 
-export type AuthState = "AUTHENTICATED" | "UNAUTHENTICATED";
+export type AuthState = "AUTHENTICATED" | "UNAUTHENTICATED" | "PENDING";
 
 export type AuthContextValues = {
   status: AuthState;
@@ -25,4 +25,5 @@ export type AuthReducerState = {
 
 export type AuthReducerAction =
   | { type: "SIGN_IN"; props: SignInResponse }
-  | { type: "SIGN_OUT" };
+  | { type: "SIGN_OUT" }
+  | { type: "PENDING" };

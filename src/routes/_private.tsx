@@ -3,9 +3,11 @@ import PrivateLayout from "~/layouts/private-layout";
 
 export const Route = createFileRoute("/_private")({
   component: PrivateLayout,
-  beforeLoad({ context: { auth } }) {
+  beforeLoad: async ({ context: { auth } }) => {
     if (auth.status === "UNAUTHENTICATED") {
-      throw redirect({ to: "/sign-in" });
+      throw redirect({
+        to: "/sign-in",
+      });
     }
   },
 });

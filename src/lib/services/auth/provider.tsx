@@ -5,20 +5,22 @@ import type { AuthToken, User } from "~/lib/types";
 import { deserialize, serialize } from "~/lib/utils";
 import { AuthContext } from "./context";
 import { AuthReducer } from "./state";
-import type {
-  AuthReducerAction,
-  AuthReducerState,
-  SignInResponse,
+import {
+  AuthContextValues,
+  type AuthReducerAction,
+  type AuthReducerState,
+  type SignInResponse,
 } from "./type";
 
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const { cookieKey } = resources;
   const [state, dispatch] = React.useReducer<
     AuthReducerState,
     [AuthReducerAction]
   >(AuthReducer, {
-    status: "UNAUTHENTICATED",
+    status: "PENDING",
     token: undefined,
     user: undefined,
   });
@@ -47,10 +49,10 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
         expires,
       };
 
-      Cookies.set("token", serializedToken, options);
-      window.localStorage.setItem("user", serializedUser);
+      Cookies.set(cookieKey.token, serializedToken, options);
+      window.localStorage.setItem(cookieKey.user, serializedUser);
     },
-    [dispatch],
+    [dispatch, cookieKey],
   );
 
   const signOut = React.useCallback(() => {
@@ -58,13 +60,14 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
       type: "SIGN_OUT",
     });
 
-    Cookies.remove("token");
-    window.localStorage.removeItem("user");
-  }, [dispatch]);
+    Cookies.remove(cookieKey.token);
+    window.localStorage.removeItem(cookieKey.user);
+  }, [dispatch, cookieKey]);
 
   useIsomorphicLayoutEffect(() => {
-    const serializeToken = Cookies.get("token");
-    const serializeUser = window.localStorage.getItem("user") || undefined;
+    const serializeToken = Cookies.get(cookieKey.token);
+    const serializeUser =
+      window.localStorage.getItem(cookieKey.user) || undefined;
 
     if (
       typeof serializeToken !== "undefined" &&
@@ -83,20 +86,32 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
             user: parseUser,
           },
         });
+        return;
       }
     }
+    dispatch({ type: "SIGN_OUT" });
   }, [dispatch]);
 
+  const authContextValues = React.useMemo<AuthContextValues>(
+    () => ({
+      signIn,
+      signOut,
+      status: state.status,
+      token: state.token,
+      user: state.user,
+    }),
+    [signIn, signOut, state],
+  );
+
   return (
-    <AuthContext.Provider
-      value={{
-        signIn,
-        signOut,
-        status: state.status,
-        token: state.token,
-        user: state.user,
-      }}>
+    <AuthContext.Provider value={authContextValues}>
       {children}
     </AuthContext.Provider>
   );
+};
+const resources = {
+  cookieKey: {
+    user: "current_user",
+    token: "auth_token",
+  },
 };

@@ -33,7 +33,7 @@ type FormItemProps = React.ComponentProps<"div">;
 export const FormItem: React.FC<FormItemProps> = ({ className, ...props }) => {
   const field = useFieldContext();
   const id = React.useId();
-  console.log(field.state.meta.errors);
+
   const formItemContextValues = React.useMemo<FormItemContextValues>(
     () => ({
       id,

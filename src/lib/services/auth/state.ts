@@ -18,6 +18,14 @@ export const AuthReducer = (
         token: undefined,
         user: undefined,
       };
+
+    case "PENDING": {
+      return {
+        ...state,
+        status: "PENDING",
+      };
+    }
+
     default:
       return state;
   }

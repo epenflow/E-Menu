@@ -19,7 +19,7 @@ import {
 import { useAuth } from "~/lib/services/auth";
 
 const NavUser = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const showUserInfo = React.useMemo(
     () => (
@@ -66,11 +66,9 @@ const NavUser = () => {
                   <span>Setting</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/">
-                  <LogOut className="mr-2" />
-                  <span>Log out</span>
-                </Link>
+              <DropdownMenuItem onClick={signOut}>
+                <LogOut className="mr-2" />
+                <span>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

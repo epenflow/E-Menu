@@ -1,9 +1,12 @@
+import { Link } from "@tanstack/react-router";
 import React from "react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
 } from "~/components/ui/sidebar";
 
 const PrivateSidebar = () => {
@@ -13,7 +16,13 @@ const PrivateSidebar = () => {
       <SidebarHeader>
         <NavHeader />
       </SidebarHeader>
-      <SidebarContent />
+      <SidebarContent>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <Link to="/role">test</Link>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarContent>
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>
