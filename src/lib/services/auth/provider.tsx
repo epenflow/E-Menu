@@ -1,21 +1,21 @@
 import Cookies from "js-cookie";
 import React from "react";
 import useIsomorphicLayoutEffect from "~/hooks/isomorphic-layout-effect";
-import type { AuthToken, User } from "~/lib/types";
+import type { AuthToken } from "~/lib/types";
 import { deserialize, serialize } from "~/lib/utils";
 import { authCookiesKey } from "./constant";
 import { AuthContext } from "./context";
 import { AuthReducer } from "./state";
 import {
-  AuthContextValues,
+  type AuthContextProviderProps,
+  type AuthContextValues,
   type AuthReducerAction,
   type AuthReducerState,
+  type CurrentUser,
   type SignInResponse,
 } from "./type";
 
-export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
+export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
   const [state, dispatch] = React.useReducer<
     AuthReducerState,
     [AuthReducerAction]
@@ -31,6 +31,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
         type: "SIGN_IN",
         props,
       });
+
       const serializedToken = serialize(props.token);
       const serializedUser = serialize(props.user);
 
@@ -74,7 +75,7 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
       typeof serializeUser !== "undefined"
     ) {
       const parseToken = deserialize<AuthToken>(serializeToken);
-      const parseUser = deserialize<User>(serializeUser);
+      const parseUser = deserialize<CurrentUser>(serializeUser);
       if (
         typeof parseToken !== "undefined" &&
         typeof parseUser !== "undefined"
@@ -103,9 +104,5 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
     [signIn, signOut, state],
   );
 
-  return (
-    <AuthContext.Provider value={authContextValues}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext value={authContextValues}>{children}</AuthContext>;
 };

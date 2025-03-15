@@ -26,14 +26,16 @@ const NavUser = () => {
       <>
         <Avatar>
           <AvatarFallback>
-            {user?.username.charAt(0).toUpperCase()}
+            {user?.username.charAt(0).toUpperCase() || "A"}
           </AvatarFallback>
         </Avatar>
         <div className="grid flex-1 text-left text-sm leading-tight text-foreground">
-          <span>{user?.username}</span>
-          <span className="text-sm text-muted-foreground">
-            {user?.role.name}
-          </span>
+          {user?.username ? <span>{user.username}</span> : null}
+          {user?.role.name ? (
+            <span className="text-sm text-muted-foreground">
+              {user.role.name}
+            </span>
+          ) : null}
         </div>
       </>
     ),
