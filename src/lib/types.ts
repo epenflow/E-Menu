@@ -24,14 +24,20 @@ export type AuthToken = {
   lastUsedAt: Date | null;
   expiresAt: Date | null;
 };
-
-export type User<T = undefined> = {
+type DefaultUser = {
   id: string;
+  name: string;
+  fName: string | null;
+  lName: string | null;
   username: string;
+  email: string;
   createdAt: Date;
   updatedAt: Date;
   roleId: number;
-} & T;
+};
+export type User<T = undefined> = T extends undefined
+  ? DefaultUser
+  : DefaultUser & T;
 
 export type Role = {
   id: string;
@@ -42,7 +48,7 @@ export type Role = {
 };
 
 export type ApiErrorResponse<T = undefined> = {
-  errors: [{ message?: string } & T];
+  errors: [{ message: string } & T];
 };
 
 export type OnSubmitAsyncValidatorProps<T> = {

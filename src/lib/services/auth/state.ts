@@ -26,6 +26,13 @@ export const AuthReducer = (
       };
     }
 
+    case "UPDATE_USER": {
+      return {
+        ...state,
+        user: { ...state.user, ...action.props },
+      };
+    }
+
     default:
       return state;
   }

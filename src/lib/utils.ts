@@ -44,3 +44,17 @@ export const assertIsDefined: <T>(
     );
   }
 };
+
+export const getInitials = (value?: string | null): string => {
+  if (!value || typeof value === "undefined") {
+    return "A";
+  }
+  const names = value.trim().split(" ");
+  if (names.length === 0) return "A";
+  if (names.length === 1) return names[0].charAt(0).toUpperCase();
+
+  const firstInitial = names[0].charAt(0);
+  const lastInitial = names[names.length - 1].charAt(0);
+
+  return `${firstInitial}${lastInitial}`.toUpperCase();
+};

@@ -17,6 +17,7 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { useAuth } from "~/lib/services/auth";
+import { getInitials } from "~/lib/utils";
 
 const NavUser = () => {
   const { user, signOut } = useAuth();
@@ -25,21 +26,17 @@ const NavUser = () => {
     () => (
       <>
         <Avatar>
-          <AvatarFallback>
-            {user?.username.charAt(0).toUpperCase() || "A"}
-          </AvatarFallback>
+          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
         </Avatar>
         <div className="grid flex-1 text-left text-sm leading-tight text-foreground">
           {user?.username ? <span>{user.username}</span> : null}
-          {user?.role.name ? (
-            <span className="text-sm text-muted-foreground">
-              {user.role.name}
-            </span>
+          {user?.email ? (
+            <span className="text-xs text-muted-foreground">{user.email}</span>
           ) : null}
         </div>
       </>
     ),
-    [user?.username, user?.role.name],
+    [user?.name, user?.username, user?.email],
   );
 
   return (
@@ -65,7 +62,7 @@ const NavUser = () => {
               <DropdownMenuItem asChild>
                 <Link to="/settings/profile" className="block w-full">
                   <Settings className="mr-2" />
-                  <span>Setting</span>
+                  <span>Settings</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={signOut}>

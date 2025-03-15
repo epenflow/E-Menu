@@ -1,80 +1,56 @@
-import { Link } from "@tanstack/react-router";
-import { Lock, User } from "lucide-react";
-import React from "react";
-import { Button, buttonVariants } from "~/components/ui/button";
+import type { DeepKeys } from "@tanstack/react-form";
+import { Lock, Mail, type LucideIcon } from "lucide-react";
+import { type HTMLInputAutoCompleteAttribute } from "react";
+import { Button } from "~/components/ui/button";
 import { Input, InputPassword } from "~/components/ui/input";
-import useEventCallback from "~/hooks/event-callback";
-import { useSignInForm } from "~/lib/services/auth";
-
-import { cn } from "~/lib/utils";
+import For from "~/components/utils/for";
+import useFormSubmit from "~/hooks/form-submit";
+import { useSignInForm, type SignInSchema } from "~/lib/services/auth";
 
 const SignInForm = () => {
+  const { signInFields } = resources;
   const signInForm = useSignInForm();
-
-  const onSubmit = useEventCallback(<T,>(e: React.FormEvent<T>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    signInForm.handleSubmit();
-  });
+  const onSubmit = useFormSubmit(signInForm.handleSubmit);
 
   return (
     <form onSubmit={onSubmit} className="space-y-6 grid">
       <div className="space-y-6">
-        <signInForm.AppField
-          name="username"
-          children={(field) => (
-            <field.FormItem>
-              <field.FormLabel>Username</field.FormLabel>
-              <field.FormFieldWithIcon Icon={User}>
-                <field.FormControl>
-                  <Input
-                    autoComplete="username"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="example"
-                  />
-                </field.FormControl>
-              </field.FormFieldWithIcon>
-              <field.FormDescription>
-                Enter your username.
-              </field.FormDescription>
-              <field.FormMessage />
-            </field.FormItem>
-          )}
-        />
-
-        <signInForm.AppField
-          name="password"
-          children={(field) => (
-            <field.FormItem>
-              <div className="grid grid-cols-2">
-                <field.FormLabel>Password</field.FormLabel>
-                <Link
-                  to="/"
-                  className={cn(
-                    buttonVariants({
-                      variant: "link",
-                    }),
-                    "p-0 h-auto justify-end text-sm leading-none",
-                  )}>
-                  Forgot password?
-                </Link>
-              </div>
-              <field.FormFieldWithIcon Icon={Lock}>
-                <field.FormControl>
-                  <InputPassword
-                    autoComplete="current-password"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="**************"
-                  />
-                </field.FormControl>
-              </field.FormFieldWithIcon>
-              <field.FormDescription>
-                Enter your account password.
-              </field.FormDescription>
-              <field.FormMessage />
-            </field.FormItem>
+        <For
+          each={signInFields}
+          children={(
+            { name, autoComplete, description, icon, label, placeholder },
+            key,
+          ) => (
+            <signInForm.AppField
+              key={`${key}-${name}`}
+              name={name}
+              children={(field) => (
+                <field.FormItem>
+                  <field.FormLabel>{label}</field.FormLabel>
+                  <field.FormFieldWithIcon Icon={icon}>
+                    <field.FormControl>
+                      {name === "username" ? (
+                        <Input
+                          autoComplete={autoComplete}
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          placeholder={placeholder}
+                        />
+                      ) : (
+                        <InputPassword
+                          autoComplete={autoComplete}
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          placeholder={placeholder}
+                        />
+                      )}
+                    </field.FormControl>
+                  </field.FormFieldWithIcon>
+                  <field.FormDescription>{description}</field.FormDescription>
+                  <field.FormMessage />
+                </field.FormItem>
+              )}
+            />
           )}
         />
       </div>
@@ -91,3 +67,32 @@ const SignInForm = () => {
   );
 };
 export default SignInForm;
+
+type Field = {
+  name: DeepKeys<SignInSchema>;
+  autoComplete: HTMLInputAutoCompleteAttribute;
+  label: string;
+  description: string;
+  placeholder: string;
+  icon: LucideIcon;
+};
+const resources = {
+  signInFields: [
+    {
+      name: "username",
+      autoComplete: "username",
+      label: "Username",
+      description: "Enter your username",
+      icon: Mail,
+      placeholder: "example",
+    },
+    {
+      name: "password",
+      autoComplete: "current-password",
+      label: "Password",
+      description: "Enter your account password.",
+      icon: Lock,
+      placeholder: "**************",
+    },
+  ] satisfies Field[],
+};

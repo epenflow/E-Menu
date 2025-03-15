@@ -2,10 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { paginationSchema } from "~/hooks/pagination";
 import { allRoleQueryOptions } from "~/lib/services/role";
-import Role from "~/pages/private/role";
 
 export const Route = createFileRoute("/_private/role")({
-  component: Role,
   validateSearch: zodValidator(paginationSchema),
   loaderDeps: (deps) => deps,
   loader: ({ deps, context }) => {

@@ -1,28 +1,19 @@
-import { Link } from "@tanstack/react-router";
 import React from "react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
 } from "~/components/ui/sidebar";
 
 const PrivateSidebar = () => {
   const { NavUser, NavHeader } = resources;
   return (
-    <Sidebar variant="inset">
+    <Sidebar>
       <SidebarHeader>
         <NavHeader />
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Link to="/role">test</Link>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarContent>
+      <SidebarContent></SidebarContent>
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>

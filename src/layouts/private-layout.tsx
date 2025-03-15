@@ -5,7 +5,7 @@ import PrivateSidebar from "./private/private-sidebar";
 
 const PrivateLayout = () => {
   return (
-    <SidebarProvider>
+    <SidebarProvider variant="inset">
       <PrivateSidebar />
       <SidebarInset>
         <PrivateHeader />

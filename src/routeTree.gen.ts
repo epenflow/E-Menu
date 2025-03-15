@@ -16,16 +16,14 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as PrivateImport } from './routes/_private'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
-import { Route as PrivateTestImport } from './routes/_private/test'
 import { Route as PrivateRoleImport } from './routes/_private/role'
-import { Route as PrivateDashboardImport } from './routes/_private/dashboard'
-import { Route as PrivateSettingsProfileImport } from './routes/_private/settings/profile'
 
 // Create Virtual Routes
 
+const PrivateDashboardLazyImport = createFileRoute('/_private/dashboard')()
 const AuthSignInLazyImport = createFileRoute('/_auth/sign-in')()
-const PrivateSettingsPasswordLazyImport = createFileRoute(
-  '/_private/settings/password',
+const PrivateSettingsProfileLazyImport = createFileRoute(
+  '/_private/settings/profile',
 )()
 
 // Create/Update Routes
@@ -46,44 +44,33 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PrivateDashboardLazyRoute = PrivateDashboardLazyImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => PrivateRoute,
+} as any).lazy(() =>
+  import('./routes/_private/dashboard.lazy').then((d) => d.Route),
+)
+
 const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   id: '/sign-in',
   path: '/sign-in',
   getParentRoute: () => AuthRoute,
 } as any).lazy(() => import('./routes/_auth/sign-in.lazy').then((d) => d.Route))
 
-const PrivateTestRoute = PrivateTestImport.update({
-  id: '/test',
-  path: '/test',
-  getParentRoute: () => PrivateRoute,
-} as any)
-
 const PrivateRoleRoute = PrivateRoleImport.update({
   id: '/role',
   path: '/role',
   getParentRoute: () => PrivateRoute,
-} as any)
+} as any).lazy(() => import('./routes/_private/role.lazy').then((d) => d.Route))
 
-const PrivateDashboardRoute = PrivateDashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => PrivateRoute,
-} as any)
-
-const PrivateSettingsPasswordLazyRoute =
-  PrivateSettingsPasswordLazyImport.update({
-    id: '/settings/password',
-    path: '/settings/password',
+const PrivateSettingsProfileLazyRoute = PrivateSettingsProfileLazyImport.update(
+  {
+    id: '/settings/profile',
+    path: '/settings/profile',
     getParentRoute: () => PrivateRoute,
-  } as any).lazy(() =>
-    import('./routes/_private/settings/password.lazy').then((d) => d.Route),
-  )
-
-const PrivateSettingsProfileRoute = PrivateSettingsProfileImport.update({
-  id: '/settings/profile',
-  path: '/settings/profile',
-  getParentRoute: () => PrivateRoute,
-} as any).lazy(() =>
+  } as any,
+).lazy(() =>
   import('./routes/_private/settings/profile.lazy').then((d) => d.Route),
 )
 
@@ -112,25 +99,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateImport
       parentRoute: typeof rootRoute
     }
-    '/_private/dashboard': {
-      id: '/_private/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof PrivateDashboardImport
-      parentRoute: typeof PrivateImport
-    }
     '/_private/role': {
       id: '/_private/role'
       path: '/role'
       fullPath: '/role'
       preLoaderRoute: typeof PrivateRoleImport
-      parentRoute: typeof PrivateImport
-    }
-    '/_private/test': {
-      id: '/_private/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof PrivateTestImport
       parentRoute: typeof PrivateImport
     }
     '/_auth/sign-in': {
@@ -140,18 +113,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInLazyImport
       parentRoute: typeof AuthImport
     }
+    '/_private/dashboard': {
+      id: '/_private/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof PrivateDashboardLazyImport
+      parentRoute: typeof PrivateImport
+    }
     '/_private/settings/profile': {
       id: '/_private/settings/profile'
       path: '/settings/profile'
       fullPath: '/settings/profile'
-      preLoaderRoute: typeof PrivateSettingsProfileImport
-      parentRoute: typeof PrivateImport
-    }
-    '/_private/settings/password': {
-      id: '/_private/settings/password'
-      path: '/settings/password'
-      fullPath: '/settings/password'
-      preLoaderRoute: typeof PrivateSettingsPasswordLazyImport
+      preLoaderRoute: typeof PrivateSettingsProfileLazyImport
       parentRoute: typeof PrivateImport
     }
   }
@@ -170,19 +143,15 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface PrivateRouteChildren {
-  PrivateDashboardRoute: typeof PrivateDashboardRoute
   PrivateRoleRoute: typeof PrivateRoleRoute
-  PrivateTestRoute: typeof PrivateTestRoute
-  PrivateSettingsProfileRoute: typeof PrivateSettingsProfileRoute
-  PrivateSettingsPasswordLazyRoute: typeof PrivateSettingsPasswordLazyRoute
+  PrivateDashboardLazyRoute: typeof PrivateDashboardLazyRoute
+  PrivateSettingsProfileLazyRoute: typeof PrivateSettingsProfileLazyRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
-  PrivateDashboardRoute: PrivateDashboardRoute,
   PrivateRoleRoute: PrivateRoleRoute,
-  PrivateTestRoute: PrivateTestRoute,
-  PrivateSettingsProfileRoute: PrivateSettingsProfileRoute,
-  PrivateSettingsPasswordLazyRoute: PrivateSettingsPasswordLazyRoute,
+  PrivateDashboardLazyRoute: PrivateDashboardLazyRoute,
+  PrivateSettingsProfileLazyRoute: PrivateSettingsProfileLazyRoute,
 }
 
 const PrivateRouteWithChildren =
@@ -191,23 +160,19 @@ const PrivateRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof PrivateRouteWithChildren
-  '/dashboard': typeof PrivateDashboardRoute
   '/role': typeof PrivateRoleRoute
-  '/test': typeof PrivateTestRoute
   '/sign-in': typeof AuthSignInLazyRoute
-  '/settings/profile': typeof PrivateSettingsProfileRoute
-  '/settings/password': typeof PrivateSettingsPasswordLazyRoute
+  '/dashboard': typeof PrivateDashboardLazyRoute
+  '/settings/profile': typeof PrivateSettingsProfileLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof PrivateRouteWithChildren
-  '/dashboard': typeof PrivateDashboardRoute
   '/role': typeof PrivateRoleRoute
-  '/test': typeof PrivateTestRoute
   '/sign-in': typeof AuthSignInLazyRoute
-  '/settings/profile': typeof PrivateSettingsProfileRoute
-  '/settings/password': typeof PrivateSettingsPasswordLazyRoute
+  '/dashboard': typeof PrivateDashboardLazyRoute
+  '/settings/profile': typeof PrivateSettingsProfileLazyRoute
 }
 
 export interface FileRoutesById {
@@ -215,12 +180,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_private': typeof PrivateRouteWithChildren
-  '/_private/dashboard': typeof PrivateDashboardRoute
   '/_private/role': typeof PrivateRoleRoute
-  '/_private/test': typeof PrivateTestRoute
   '/_auth/sign-in': typeof AuthSignInLazyRoute
-  '/_private/settings/profile': typeof PrivateSettingsProfileRoute
-  '/_private/settings/password': typeof PrivateSettingsPasswordLazyRoute
+  '/_private/dashboard': typeof PrivateDashboardLazyRoute
+  '/_private/settings/profile': typeof PrivateSettingsProfileLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -228,33 +191,21 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
-    | '/dashboard'
     | '/role'
-    | '/test'
     | '/sign-in'
+    | '/dashboard'
     | '/settings/profile'
-    | '/settings/password'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/dashboard'
-    | '/role'
-    | '/test'
-    | '/sign-in'
-    | '/settings/profile'
-    | '/settings/password'
+  to: '/' | '' | '/role' | '/sign-in' | '/dashboard' | '/settings/profile'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_private'
-    | '/_private/dashboard'
     | '/_private/role'
-    | '/_private/test'
     | '/_auth/sign-in'
+    | '/_private/dashboard'
     | '/_private/settings/profile'
-    | '/_private/settings/password'
   fileRoutesById: FileRoutesById
 }
 
@@ -297,35 +248,25 @@ export const routeTree = rootRoute
     "/_private": {
       "filePath": "_private.tsx",
       "children": [
-        "/_private/dashboard",
         "/_private/role",
-        "/_private/test",
-        "/_private/settings/profile",
-        "/_private/settings/password"
+        "/_private/dashboard",
+        "/_private/settings/profile"
       ]
-    },
-    "/_private/dashboard": {
-      "filePath": "_private/dashboard.tsx",
-      "parent": "/_private"
     },
     "/_private/role": {
       "filePath": "_private/role.tsx",
-      "parent": "/_private"
-    },
-    "/_private/test": {
-      "filePath": "_private/test.tsx",
       "parent": "/_private"
     },
     "/_auth/sign-in": {
       "filePath": "_auth/sign-in.lazy.tsx",
       "parent": "/_auth"
     },
-    "/_private/settings/profile": {
-      "filePath": "_private/settings/profile.tsx",
+    "/_private/dashboard": {
+      "filePath": "_private/dashboard.lazy.tsx",
       "parent": "/_private"
     },
-    "/_private/settings/password": {
-      "filePath": "_private/settings/password.lazy.tsx",
+    "/_private/settings/profile": {
+      "filePath": "_private/settings/profile.lazy.tsx",
       "parent": "/_private"
     }
   }

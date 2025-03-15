@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import React from "react";
 import useIsomorphicLayoutEffect from "~/hooks/isomorphic-layout-effect";
@@ -16,6 +17,7 @@ import {
 } from "./type";
 
 export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
+  const query = useQueryClient();
   const [state, dispatch] = React.useReducer<
     AuthReducerState,
     [AuthReducerAction]
@@ -31,6 +33,9 @@ export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
         type: "SIGN_IN",
         props,
       });
+
+      query.setQueryData([authCookiesKey.user], props.user);
+      query.setQueryData([authCookiesKey.token], props.token);
 
       const serializedToken = serialize(props.token);
       const serializedUser = serialize(props.user);
@@ -53,7 +58,7 @@ export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
       Cookies.set(authCookiesKey.token, serializedToken, options);
       window.localStorage.setItem(authCookiesKey.user, serializedUser);
     },
-    [dispatch],
+    [dispatch, query],
   );
 
   const signOut = React.useCallback(() => {
@@ -61,9 +66,29 @@ export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
       type: "SIGN_OUT",
     });
 
+    query.clear();
+
     Cookies.remove(authCookiesKey.token);
     window.localStorage.removeItem(authCookiesKey.user);
-  }, [dispatch]);
+  }, [dispatch, query]);
+
+  const updateCurrentUser = React.useCallback(
+    (user: CurrentUser) => {
+      dispatch({
+        type: "UPDATE_USER",
+        props: user,
+      });
+
+      query.setQueryData([authCookiesKey.user], {
+        ...state.user,
+        ...user,
+      });
+
+      const serializedUser = serialize(user);
+      window.localStorage.setItem(authCookiesKey.user, serializedUser);
+    },
+    [dispatch, query, state.user],
+  );
 
   useIsomorphicLayoutEffect(() => {
     const serializeToken = Cookies.get(authCookiesKey.token);
@@ -87,11 +112,14 @@ export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
             user: parseUser,
           },
         });
+
+        query.setQueryData([authCookiesKey.user], parseUser);
+        query.setQueryData([authCookiesKey.token], parseToken);
         return;
       }
     }
     dispatch({ type: "SIGN_OUT" });
-  }, [dispatch]);
+  }, [dispatch, query]);
 
   const authContextValues = React.useMemo<AuthContextValues>(
     () => ({
@@ -100,8 +128,9 @@ export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
       status: state.status,
       token: state.token,
       user: state.user,
+      updateCurrentUser,
     }),
-    [signIn, signOut, state],
+    [signIn, signOut, state, updateCurrentUser],
   );
 
   return <AuthContext value={authContextValues}>{children}</AuthContext>;

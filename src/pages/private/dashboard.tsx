@@ -1,60 +1,20 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRouteApi, Link } from "@tanstack/react-router";
-import For from "~/components/utils/for";
-import usePagination from "~/hooks/pagination";
-import { productsQueryOptions } from "~/lib/test";
+import PrivateContainer from "~/layouts/private/private-container";
+import { useAuth } from "~/lib/services/auth";
 
 const Dashboard = () => {
-  const { routeApi } = resources;
-  const search = routeApi.useSearch();
-  const {
-    data: { data, meta: paginator },
-  } = useSuspenseQuery(productsQueryOptions(search));
-  const { onNextPage, onPrevPage, hasNextPage, hasPrevPage } = usePagination(
-    "/_private/dashboard",
-    paginator,
-  );
-
+  const { user } = useAuth();
   return (
-    <div>
-      <Link to="/">Back</Link>
-      <p>{search.page}</p>
-      <p>{search.limit}</p>
-
-      <div className="flex gap-2 text-sm font-medium">
-        <button
-          className={hasNextPage ? "text-destructive" : "text-primary"}
-          disabled={hasNextPage}
-          onClick={onNextPage}>
-          next
-        </button>
-        <button
-          className={hasPrevPage ? "text-destructive" : "text-primary"}
-          disabled={hasPrevPage}
-          onClick={onPrevPage}>
-          prev
-        </button>
+    <PrivateContainer>
+      <div className="h-private-container">
+        <p>{user?.name}</p>
       </div>
-      <div className="grid grid-cols-4  gap-2 container">
-        <For each={data}>
-          {(value, key) => (
-            <div
-              key={`${key}-${value.title}`}
-              className="border p-6 rounded-md">
-              <div className="inline-flex items-center justify-between w-full">
-                <h1 className="text-lg font-medium">{value.title}</h1>
-                <p className="text-sm text-muted-foreground">{value.genre}</p>
-              </div>
-              <p>{value.createdAt}</p>
-              <p>{value.updatedAt}</p>
-            </div>
-          )}
-        </For>
+      <div className="h-private-container">
+        <p>{user?.name}</p>
       </div>
-    </div>
+      <div className="h-private-container">
+        <p>{user?.name}</p>
+      </div>
+    </PrivateContainer>
   );
 };
 export default Dashboard;
-const resources = {
-  routeApi: getRouteApi("/_private/dashboard"),
-};
