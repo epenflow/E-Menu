@@ -1,3 +1,5 @@
+import type { FormApi } from "@tanstack/react-form";
+
 export type Paginator = {
   total: number;
   perPage: number;
@@ -37,4 +39,15 @@ export type Role = {
   abilities: string[];
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type ApiErrorResponse<T = undefined> = {
+  errors: [{ message?: string } & T];
+};
+
+export type OnSubmitAsyncValidatorProps<T> = {
+  value: T;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formApi: FormApi<T, any, any, any, any, any, any, any, any, any>;
+  signal: AbortSignal;
 };

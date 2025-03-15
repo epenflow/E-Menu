@@ -28,6 +28,7 @@ const SignInForm = () => {
               <field.FormFieldWithIcon Icon={User}>
                 <field.FormControl>
                   <Input
+                    autoComplete="username"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="example"
@@ -62,6 +63,7 @@ const SignInForm = () => {
               <field.FormFieldWithIcon Icon={Lock}>
                 <field.FormControl>
                   <InputPassword
+                    autoComplete="current-password"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="**************"

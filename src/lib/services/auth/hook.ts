@@ -1,10 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import React from "react";
 import { useAppForm } from "~/hooks/form";
+import type {
+  ApiErrorResponse,
+  OnSubmitAsyncValidatorProps,
+} from "~/lib/types";
 import { authQueryKey } from "./constant";
 import { AuthContext } from "./context";
 import { signInMutationFn } from "./query";
 import { signInSchema } from "./schema";
+import type { SignInSchema } from "./type";
 
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
@@ -16,7 +22,7 @@ export const useAuth = () => {
 };
 
 const useSignInMutation = () => {
-  const { signIn, signOut } = useAuth();
+  const { signIn } = useAuth();
 
   return useMutation({
     mutationKey: authQueryKey.signIn,
@@ -24,14 +30,42 @@ const useSignInMutation = () => {
     onSuccess: (data) => {
       signIn(data);
     },
-    onError: () => {
-      signOut();
-    },
   });
 };
 
 export const useSignInForm = () => {
   const { mutateAsync } = useSignInMutation();
+
+  const onSubmitAsync = React.useCallback(
+    async (
+      props: OnSubmitAsyncValidatorProps<SignInSchema>,
+    ): Promise<{ fields: unknown } | undefined> => {
+      try {
+        await mutateAsync(props.value);
+      } catch (error) {
+        if (error instanceof AxiosError && error.response) {
+          const { errors }: ApiErrorResponse<{ field?: string }> =
+            error.response.data;
+          const fields = Object.create(null);
+
+          errors.forEach(({ field, message }) => {
+            const responses = [{ message }];
+
+            if (field) {
+              fields[field] = responses;
+            } else {
+              fields["username"] = responses;
+              fields["password"] = responses;
+            }
+          });
+
+          return { fields };
+        }
+      }
+      return undefined;
+    },
+    [mutateAsync],
+  );
 
   return useAppForm({
     defaultValues: {
@@ -42,13 +76,7 @@ export const useSignInForm = () => {
       onChange: signInSchema,
       onChangeAsync: signInSchema,
       onChangeAsyncDebounceMs: 500,
-    },
-    onSubmit: async (props) => {
-      try {
-        await mutateAsync(props.value);
-      } catch (error) {
-        console.log(error);
-      }
+      onSubmitAsync,
     },
   });
 };
