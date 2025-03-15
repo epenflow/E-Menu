@@ -8,7 +8,7 @@ const Role = () => {
   const {
     data: { data },
   } = useSuspenseQuery(allRoleQueryOptions(routeApi.useSearch()));
-  console.log(data);
+
   return (
     <div>
       <For

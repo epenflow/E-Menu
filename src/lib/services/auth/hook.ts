@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useAppForm } from "~/hooks/form";
+import { authQueryKey } from "./constant";
 import { AuthContext } from "./context";
 import { signInMutationFn } from "./query";
 import { signInSchema } from "./schema";
@@ -18,7 +19,7 @@ const useSignInMutation = () => {
   const { signIn, signOut } = useAuth();
 
   return useMutation({
-    mutationKey: ["sign-in"],
+    mutationKey: authQueryKey.signIn,
     mutationFn: signInMutationFn,
     onSuccess: (data) => {
       signIn(data);

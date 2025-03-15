@@ -3,6 +3,7 @@ import React from "react";
 import useIsomorphicLayoutEffect from "~/hooks/isomorphic-layout-effect";
 import type { AuthToken, User } from "~/lib/types";
 import { deserialize, serialize } from "~/lib/utils";
+import { authCookiesKey } from "./constant";
 import { AuthContext } from "./context";
 import { AuthReducer } from "./state";
 import {
@@ -15,7 +16,6 @@ import {
 export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const { cookieKey } = resources;
   const [state, dispatch] = React.useReducer<
     AuthReducerState,
     [AuthReducerAction]
@@ -49,10 +49,10 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
         expires,
       };
 
-      Cookies.set(cookieKey.token, serializedToken, options);
-      window.localStorage.setItem(cookieKey.user, serializedUser);
+      Cookies.set(authCookiesKey.token, serializedToken, options);
+      window.localStorage.setItem(authCookiesKey.user, serializedUser);
     },
-    [dispatch, cookieKey],
+    [dispatch],
   );
 
   const signOut = React.useCallback(() => {
@@ -60,14 +60,14 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
       type: "SIGN_OUT",
     });
 
-    Cookies.remove(cookieKey.token);
-    window.localStorage.removeItem(cookieKey.user);
-  }, [dispatch, cookieKey]);
+    Cookies.remove(authCookiesKey.token);
+    window.localStorage.removeItem(authCookiesKey.user);
+  }, [dispatch]);
 
   useIsomorphicLayoutEffect(() => {
-    const serializeToken = Cookies.get(cookieKey.token);
+    const serializeToken = Cookies.get(authCookiesKey.token);
     const serializeUser =
-      window.localStorage.getItem(cookieKey.user) || undefined;
+      window.localStorage.getItem(authCookiesKey.user) || undefined;
 
     if (
       typeof serializeToken !== "undefined" &&
@@ -108,10 +108,4 @@ export const AuthContextProvider: React.FC<React.PropsWithChildren> = ({
       {children}
     </AuthContext.Provider>
   );
-};
-const resources = {
-  cookieKey: {
-    user: "current_user",
-    token: "auth_token",
-  },
 };

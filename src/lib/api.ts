@@ -4,10 +4,12 @@ import axios, {
   type RawAxiosRequestHeaders,
 } from "axios";
 import Cookies from "js-cookie";
+import { authCookiesKey } from "./services/auth";
 import type { AuthToken } from "./types";
 import { assertIsDefined, deserialize } from "./utils";
 
-const baseURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";
+export const baseURL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";
 
 const api = axios.create({ baseURL });
 export default api;
@@ -18,14 +20,14 @@ type MethodsHeaders = Partial<
   } & { common: AxiosHeaders }
 >;
 
-export const apiHeader = ():
+export const apiToken = ():
   | (RawAxiosRequestHeaders & MethodsHeaders)
   | AxiosHeaders
   | undefined => {
-  const token = Cookies.get("token");
+  const serializeToken = Cookies.get(authCookiesKey.token);
 
-  if (typeof token !== "undefined") {
-    const parseToken = deserialize<AuthToken>(token);
+  if (typeof serializeToken !== "undefined") {
+    const parseToken = deserialize<AuthToken>(serializeToken);
 
     assertIsDefined(parseToken);
 
