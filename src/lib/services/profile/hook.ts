@@ -1,17 +1,19 @@
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { useAppForm } from "~/hooks/form";
-import type { ApiErrorResponse } from "~/lib/types";
+import { useAppForm, useFormOnSubmitAsyncValidator } from "~/hooks/form";
 import { useAuth } from "../auth";
-import { updateProfileMutationFn } from "./query";
-import { updateProfileSchema } from "./schema";
+import { updatePasswordMutationFn, updateProfileMutationFn } from "./query";
+import { updatePasswordSchema, updateProfileSchema } from "./schema";
+import type { UpdatePasswordSchema, UpdateProfileSchema } from "./type";
 
 const useUpdateProfileMutation = () => {
   const { user, updateCurrentUser } = useAuth();
+  /**
+   * @todo - toast success message
+   */
   return useMutation({
     mutationKey: ["update-profile"],
     mutationFn: updateProfileMutationFn,
-    onSuccess: (data) => {
+    onSuccess: ({ data }) => {
       updateCurrentUser({
         ...data,
         role: user!.role,
@@ -22,7 +24,10 @@ const useUpdateProfileMutation = () => {
 
 export const useUpdateProfileForm = () => {
   const { user } = useAuth();
-  const { mutateAsync } = useUpdateProfileMutation();
+  const updateProfileMutation = useUpdateProfileMutation();
+  const onSubmitAsync = useFormOnSubmitAsyncValidator(
+    updateProfileMutation.mutateAsync,
+  );
 
   return useAppForm({
     defaultValues: {
@@ -30,32 +35,47 @@ export const useUpdateProfileForm = () => {
       lName: user?.lName || "",
       username: user?.username || "",
       email: user?.email || "",
-    },
+    } as UpdateProfileSchema,
     validators: {
       onChange: updateProfileSchema,
       onChangeAsync: updateProfileSchema,
       onChangeAsyncDebounceMs: 500,
-      onSubmitAsync: async (props) => {
-        try {
-          await mutateAsync(props.value);
-        } catch (error) {
-          if (error instanceof AxiosError && error.response) {
-            const { errors }: ApiErrorResponse<{ field?: string }> =
-              error.response.data;
-            const fields = Object.create(null);
+      onSubmitAsync,
+    },
+  });
+};
 
-            errors.forEach(({ message, field }) => {
-              const response = [{ message }];
-              if (field) {
-                fields[field] = response;
-              }
-            });
+const useUpdatePasswordMutation = () => {
+  /**
+   * @todo - toast success message
+   */
 
-            return { fields };
-          }
-        }
-        return undefined;
-      },
+  return useMutation({
+    mutationKey: ["update-password"],
+    mutationFn: updatePasswordMutationFn,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+};
+
+export const useUpdatePasswordForm = () => {
+  const updatePasswordMutation = useUpdatePasswordMutation();
+  const onSubmitAsync = useFormOnSubmitAsyncValidator(
+    updatePasswordMutation.mutateAsync,
+  );
+
+  return useAppForm({
+    defaultValues: {
+      confirmPassword: "",
+      currentPassword: "",
+      newPassword: "",
+    } as UpdatePasswordSchema,
+    validators: {
+      onChange: updatePasswordSchema,
+      onChangeAsync: updatePasswordSchema,
+      onChangeAsyncDebounceMs: 500,
+      onSubmitAsync,
     },
   });
 };

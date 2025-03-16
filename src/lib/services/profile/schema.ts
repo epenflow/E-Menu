@@ -17,3 +17,28 @@ export const updateProfileSchema = z.object({
     ),
   email: z.string().email("The email field must be a valid email address"),
 });
+
+export const updatePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(1, "The current password field must be defined"),
+    newPassword: z
+      .string()
+      .regex(
+        PATTERN.password,
+        "The new password field must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+      )
+      .min(4, "The new password field must be at least 4 characters long"),
+    confirmPassword: z.string(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.newPassword !== value.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "The new password field and confirm password field must be the same",
+        path: ["newPassword"],
+      });
+    }
+  });

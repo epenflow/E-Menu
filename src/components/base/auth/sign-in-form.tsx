@@ -4,13 +4,13 @@ import { type HTMLInputAutoCompleteAttribute } from "react";
 import { Button } from "~/components/ui/button";
 import { Input, InputPassword } from "~/components/ui/input";
 import For from "~/components/utils/for";
-import useFormSubmit from "~/hooks/form-submit";
+import { useFormOnSubmit } from "~/hooks/form";
 import { useSignInForm, type SignInSchema } from "~/lib/services/auth";
 
 const SignInForm = () => {
   const { signInFields } = resources;
   const signInForm = useSignInForm();
-  const onSubmit = useFormSubmit(signInForm.handleSubmit);
+  const onSubmit = useFormOnSubmit(signInForm.handleSubmit);
 
   return (
     <form onSubmit={onSubmit} className="space-y-6 grid">
@@ -25,10 +25,10 @@ const SignInForm = () => {
               key={`${key}-${name}`}
               name={name}
               children={(field) => (
-                <field.FormItem>
-                  <field.FormLabel>{label}</field.FormLabel>
-                  <field.FormFieldWithIcon Icon={icon}>
-                    <field.FormControl>
+                <field.FieldItem>
+                  <field.FieldLabel>{label}</field.FieldLabel>
+                  <field.FieldControlWithIcon Icon={icon}>
+                    <field.FieldControl>
                       {name === "username" ? (
                         <Input
                           autoComplete={autoComplete}
@@ -44,16 +44,20 @@ const SignInForm = () => {
                           placeholder={placeholder}
                         />
                       )}
-                    </field.FormControl>
-                  </field.FormFieldWithIcon>
-                  <field.FormDescription>{description}</field.FormDescription>
-                  <field.FormMessage />
-                </field.FormItem>
+                    </field.FieldControl>
+                  </field.FieldControlWithIcon>
+                  <field.FieldDescription>{description}</field.FieldDescription>
+                  <field.FieldMessage />
+                </field.FieldItem>
               )}
             />
           )}
         />
       </div>
+
+      <signInForm.AppForm>
+        <signInForm.FormMessage />
+      </signInForm.AppForm>
 
       <signInForm.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}

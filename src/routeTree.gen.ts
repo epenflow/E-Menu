@@ -25,6 +25,9 @@ const AuthSignInLazyImport = createFileRoute('/_auth/sign-in')()
 const PrivateSettingsProfileLazyImport = createFileRoute(
   '/_private/settings/profile',
 )()
+const PrivateSettingsPasswordLazyImport = createFileRoute(
+  '/_private/settings/password',
+)()
 
 // Create/Update Routes
 
@@ -74,6 +77,15 @@ const PrivateSettingsProfileLazyRoute = PrivateSettingsProfileLazyImport.update(
   import('./routes/_private/settings/profile.lazy').then((d) => d.Route),
 )
 
+const PrivateSettingsPasswordLazyRoute =
+  PrivateSettingsPasswordLazyImport.update({
+    id: '/settings/password',
+    path: '/settings/password',
+    getParentRoute: () => PrivateRoute,
+  } as any).lazy(() =>
+    import('./routes/_private/settings/password.lazy').then((d) => d.Route),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -120,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateDashboardLazyImport
       parentRoute: typeof PrivateImport
     }
+    '/_private/settings/password': {
+      id: '/_private/settings/password'
+      path: '/settings/password'
+      fullPath: '/settings/password'
+      preLoaderRoute: typeof PrivateSettingsPasswordLazyImport
+      parentRoute: typeof PrivateImport
+    }
     '/_private/settings/profile': {
       id: '/_private/settings/profile'
       path: '/settings/profile'
@@ -145,12 +164,14 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 interface PrivateRouteChildren {
   PrivateRoleRoute: typeof PrivateRoleRoute
   PrivateDashboardLazyRoute: typeof PrivateDashboardLazyRoute
+  PrivateSettingsPasswordLazyRoute: typeof PrivateSettingsPasswordLazyRoute
   PrivateSettingsProfileLazyRoute: typeof PrivateSettingsProfileLazyRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
   PrivateRoleRoute: PrivateRoleRoute,
   PrivateDashboardLazyRoute: PrivateDashboardLazyRoute,
+  PrivateSettingsPasswordLazyRoute: PrivateSettingsPasswordLazyRoute,
   PrivateSettingsProfileLazyRoute: PrivateSettingsProfileLazyRoute,
 }
 
@@ -163,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/role': typeof PrivateRoleRoute
   '/sign-in': typeof AuthSignInLazyRoute
   '/dashboard': typeof PrivateDashboardLazyRoute
+  '/settings/password': typeof PrivateSettingsPasswordLazyRoute
   '/settings/profile': typeof PrivateSettingsProfileLazyRoute
 }
 
@@ -172,6 +194,7 @@ export interface FileRoutesByTo {
   '/role': typeof PrivateRoleRoute
   '/sign-in': typeof AuthSignInLazyRoute
   '/dashboard': typeof PrivateDashboardLazyRoute
+  '/settings/password': typeof PrivateSettingsPasswordLazyRoute
   '/settings/profile': typeof PrivateSettingsProfileLazyRoute
 }
 
@@ -183,6 +206,7 @@ export interface FileRoutesById {
   '/_private/role': typeof PrivateRoleRoute
   '/_auth/sign-in': typeof AuthSignInLazyRoute
   '/_private/dashboard': typeof PrivateDashboardLazyRoute
+  '/_private/settings/password': typeof PrivateSettingsPasswordLazyRoute
   '/_private/settings/profile': typeof PrivateSettingsProfileLazyRoute
 }
 
@@ -194,9 +218,17 @@ export interface FileRouteTypes {
     | '/role'
     | '/sign-in'
     | '/dashboard'
+    | '/settings/password'
     | '/settings/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/role' | '/sign-in' | '/dashboard' | '/settings/profile'
+  to:
+    | '/'
+    | ''
+    | '/role'
+    | '/sign-in'
+    | '/dashboard'
+    | '/settings/password'
+    | '/settings/profile'
   id:
     | '__root__'
     | '/'
@@ -205,6 +237,7 @@ export interface FileRouteTypes {
     | '/_private/role'
     | '/_auth/sign-in'
     | '/_private/dashboard'
+    | '/_private/settings/password'
     | '/_private/settings/profile'
   fileRoutesById: FileRoutesById
 }
@@ -250,6 +283,7 @@ export const routeTree = rootRoute
       "children": [
         "/_private/role",
         "/_private/dashboard",
+        "/_private/settings/password",
         "/_private/settings/profile"
       ]
     },
@@ -263,6 +297,10 @@ export const routeTree = rootRoute
     },
     "/_private/dashboard": {
       "filePath": "_private/dashboard.lazy.tsx",
+      "parent": "/_private"
+    },
+    "/_private/settings/password": {
+      "filePath": "_private/settings/password.lazy.tsx",
       "parent": "/_private"
     },
     "/_private/settings/profile": {

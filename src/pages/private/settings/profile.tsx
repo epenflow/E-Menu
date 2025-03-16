@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Block, Heading, Text } from "~/components/ui/typography";
 import For from "~/components/utils/for";
-import useFormSubmit from "~/hooks/form-submit";
+import { useFormOnSubmit } from "~/hooks/form";
 import SettingsLayout from "~/layouts/settings-layout";
 import {
   useUpdateProfileForm,
@@ -13,7 +13,7 @@ import {
 const Profile = () => {
   const { nameFields, credentialFields } = resources;
   const updateProfileForm = useUpdateProfileForm();
-  const onSubmit = useFormSubmit(updateProfileForm.handleSubmit);
+  const onSubmit = useFormOnSubmit(updateProfileForm.handleSubmit);
 
   return (
     <SettingsLayout>
@@ -36,16 +36,16 @@ const Profile = () => {
                   key={`${name}-${key}`}
                   name={name}
                   children={(field) => (
-                    <field.FormItem>
-                      <field.FormLabel>{label}</field.FormLabel>
-                      <field.FormControl>
+                    <field.FieldItem>
+                      <field.FieldLabel>{label}</field.FieldLabel>
+                      <field.FieldControl>
                         <Input
                           defaultValue={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
-                      </field.FormControl>
-                      <field.FormMessage />
-                    </field.FormItem>
+                      </field.FieldControl>
+                      <field.FieldMessage />
+                    </field.FieldItem>
                   )}
                 />
               )}
@@ -59,16 +59,16 @@ const Profile = () => {
                 key={`${name}-${key}`}
                 name={name}
                 children={(field) => (
-                  <field.FormItem>
-                    <field.FormLabel>{label}</field.FormLabel>
-                    <field.FormControl>
+                  <field.FieldItem>
+                    <field.FieldLabel>{label}</field.FieldLabel>
+                    <field.FieldControl>
                       <Input
                         defaultValue={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
-                    </field.FormControl>
-                    <field.FormMessage />
-                  </field.FormItem>
+                    </field.FieldControl>
+                    <field.FieldMessage />
+                  </field.FieldItem>
                 )}
               />
             )}

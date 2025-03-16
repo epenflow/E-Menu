@@ -22,7 +22,7 @@ const PrivateContainer: PrivateContainerProps = ({
           {
             "max-h-private-container h-private-container":
               variant === "sidebar",
-            "max-h-private-container-inset h-private-container-inset":
+            "md:max-h-private-container-inset md:h-private-container-inset h-private-container max-h-private-container":
               variant === "inset",
           },
           className,

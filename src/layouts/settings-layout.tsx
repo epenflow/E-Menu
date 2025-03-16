@@ -60,7 +60,7 @@ const resources = {
     },
     {
       title: "Password",
-      to: "/settings/profile",
+      to: "/settings/password",
     },
   ] satisfies { title: string; to: FileRouteTypes["to"] }[],
 };

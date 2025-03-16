@@ -47,10 +47,28 @@ export type Role = {
   updatedAt: Date;
 };
 
-export type ApiErrorResponse<T = undefined> = {
-  errors: [{ message: string } & T];
-};
-
+type ApiBaseResponse<T = undefined> = {
+  success?: boolean;
+  status?: number;
+  message?: string;
+} & T;
+export type ApiSuccessResponse<T = undefined> = ApiBaseResponse<{
+  data: T;
+}>;
+export type ApiErrorResponse<
+  T =
+    | {
+        field: string;
+        message: string;
+        rule: string;
+        meta?: unknown;
+      }
+    | {
+        message: string;
+      },
+> = ApiBaseResponse<{
+  errors: T[];
+}>;
 export type OnSubmitAsyncValidatorProps<T> = {
   value: T;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
