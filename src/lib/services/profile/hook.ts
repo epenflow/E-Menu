@@ -14,10 +14,12 @@ const useUpdateProfileMutation = () => {
     mutationKey: ["update-profile"],
     mutationFn: updateProfileMutationFn,
     onSuccess: ({ data }) => {
-      updateCurrentUser({
-        ...data,
-        role: user!.role,
-      });
+      if (typeof data !== "undefined") {
+        updateCurrentUser({
+          ...data,
+          role: user!.role,
+        });
+      }
     },
   });
 };

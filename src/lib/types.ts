@@ -47,27 +47,20 @@ export type Role = {
   updatedAt: Date;
 };
 
-type ApiBaseResponse<T = undefined> = {
-  success?: boolean;
-  status?: number;
-  message?: string;
+export type ApiBaseResponse<T = undefined> = {
+  success: boolean;
+  status: number;
+  message: string;
 } & T;
 export type ApiSuccessResponse<T = undefined> = ApiBaseResponse<{
-  data: T;
+  data?: T;
 }>;
-export type ApiErrorResponse<
-  T =
-    | {
-        field: string;
-        message: string;
-        rule: string;
-        meta?: unknown;
-      }
-    | {
-        message: string;
-      },
-> = ApiBaseResponse<{
-  errors: T[];
+export type BaseErrorResponse =
+  | { field: string; message: string; rule?: string; meta?: unknown }
+  | { message: string };
+
+export type ApiErrorResponse<T = BaseErrorResponse> = ApiBaseResponse<{
+  errors?: T[];
 }>;
 export type OnSubmitAsyncValidatorProps<T> = {
   value: T;

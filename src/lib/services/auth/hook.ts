@@ -23,7 +23,10 @@ const useSignInMutation = () => {
     mutationKey: authQueryKey.signIn,
     mutationFn: signInMutationFn,
     onSuccess: ({ data, message }) => {
-      signIn(data);
+      console.log(data);
+      if (typeof data !== "undefined") {
+        signIn(data);
+      }
       /**
        * @todo - Toast
        */

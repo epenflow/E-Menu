@@ -65,22 +65,24 @@ export const useFormErrorReporter = () => {
       const fields = Object.create(null);
       const form: string[] = [];
 
-      errors.forEach((err) => {
-        if ("field" in err) {
-          fields[err.field] = [
-            {
-              ...err,
-            },
-          ];
-        } else if ("message" in err) {
-          form.push(err.message);
-        }
-      });
-
-      return {
-        form,
-        fields,
-      };
+      if (typeof errors !== "undefined") {
+        errors.forEach((err) => {
+          if ("field" in err) {
+            fields[err.field] = [
+              {
+                ...err,
+              },
+            ];
+          } else if ("message" in err) {
+            form.push(err.message);
+          }
+        });
+        return {
+          form,
+          fields,
+        };
+      }
+      return undefined;
     }
 
     return undefined;
@@ -93,20 +95,20 @@ export const useFormOnSubmitAsyncValidator = <
   TVariables,
   TContext,
 >(
-  mutationAsync: UseMutateAsyncFunction<TData, TError, TVariables, TContext>,
+  fn: UseMutateAsyncFunction<TData, TError, TVariables, TContext>,
 ) => {
   const formErrorReporter = useFormErrorReporter();
 
   return React.useCallback(
     async (props: OnSubmitAsyncValidatorProps<TVariables>) => {
       try {
-        await mutationAsync(props.value);
+        await fn(props.value);
       } catch (error) {
         return formErrorReporter(error);
       }
       return undefined;
     },
-    [formErrorReporter, mutationAsync],
+    [formErrorReporter, fn],
   );
 };
 
