@@ -1,7 +1,8 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import type { UseMutateAsyncFunction } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { AxiosError, HttpStatusCode } from "axios";
 import React from "react";
+import { useAuth } from "~/lib/services/auth";
 import type {
   ApiErrorResponse,
   OnSubmitAsyncValidatorProps,
@@ -59,34 +60,45 @@ export const { withForm, useAppForm } = createFormHook({
 });
 
 export const useFormErrorReporter = () => {
-  return React.useCallback((error: unknown) => {
-    if (error instanceof AxiosError && error.response) {
-      const { errors }: ApiErrorResponse = error.response.data;
-      const fields = Object.create(null);
-      const form: string[] = [];
+  const { deleteUserCredentials } = useAuth();
 
-      if (typeof errors !== "undefined") {
-        errors.forEach((err) => {
-          if ("field" in err) {
-            fields[err.field] = [
-              {
-                ...err,
-              },
-            ];
-          } else if ("message" in err) {
-            form.push(err.message);
-          }
-        });
-        return {
-          form,
-          fields,
-        };
+  return React.useCallback(
+    (error: unknown) => {
+      if (error instanceof AxiosError && error.response) {
+        if (error.status === HttpStatusCode.Unauthorized) {
+          deleteUserCredentials();
+          return undefined;
+        }
+
+        const { errors }: ApiErrorResponse = error.response.data;
+        console.log(error, errors);
+        const fields = Object.create(null);
+        const form: string[] = [];
+
+        if (typeof errors !== "undefined") {
+          errors.forEach((err) => {
+            if ("field" in err) {
+              fields[err.field] = [
+                {
+                  ...err,
+                },
+              ];
+            } else if ("message" in err) {
+              form.push(err.message);
+            }
+          });
+          return {
+            form,
+            fields,
+          };
+        }
+        return undefined;
       }
-      return undefined;
-    }
 
-    return undefined;
-  }, []);
+      return undefined;
+    },
+    [deleteUserCredentials],
+  );
 };
 
 export const useFormOnSubmitAsyncValidator = <

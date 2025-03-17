@@ -1,5 +1,5 @@
 import type { ApiSuccessResponse } from "~/lib/types";
-import api from "../../api";
+import api, { apiToken } from "../../api";
 import type { SignInResponse, SignInSchema } from "./type";
 
 export const signInMutationFn = async (props: SignInSchema) => {
@@ -9,6 +9,15 @@ export const signInMutationFn = async (props: SignInSchema) => {
       ...props,
     },
   );
+
+  return data;
+};
+
+export const signOutMutationFn = async () => {
+  const { data } = await api.post<ApiSuccessResponse>("/auth/sign-out", null, {
+    headers: apiToken(),
+    withCredentials: true,
+  });
 
   return data;
 };

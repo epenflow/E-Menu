@@ -3,7 +3,7 @@ import React from "react";
 import { useAppForm, useFormOnSubmitAsyncValidator } from "~/hooks/form";
 import { authQueryKey } from "./constant";
 import { AuthContext } from "./context";
-import { signInMutationFn } from "./query";
+import { signInMutationFn, signOutMutationFn } from "./query";
 import { signInSchema } from "./schema";
 import type { SignInSchema } from "./type";
 
@@ -54,5 +54,12 @@ export const useSignInForm = () => {
       onChangeAsyncDebounceMs: 500,
       onSubmitAsync,
     },
+  });
+};
+
+export const useSignOutMutation = () => {
+  return useMutation({
+    mutationKey: authQueryKey.signOut,
+    mutationFn: signOutMutationFn,
   });
 };

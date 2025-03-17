@@ -1,11 +1,16 @@
 import { useQueryClient } from "@tanstack/react-query";
-import Cookies from "js-cookie";
+import { AxiosError, HttpStatusCode } from "axios";
 import React from "react";
 import useIsomorphicLayoutEffect from "~/hooks/isomorphic-layout-effect";
-import type { AuthToken } from "~/lib/types";
-import { deserialize, serialize } from "~/lib/utils";
+import { serialize } from "~/lib/utils";
 import { authCookiesKey } from "./constant";
 import { AuthContext } from "./context";
+import {
+  getUserCredentials,
+  removeUserCredentials,
+  setUserCredentials,
+} from "./helper";
+import { useSignOutMutation } from "./hook";
 import { AuthReducer } from "./state";
 import {
   type AuthContextProviderProps,
@@ -16,122 +21,113 @@ import {
   type SignInResponse,
 } from "./type";
 
-export const AuthContextProvider: AuthContextProviderProps = ({ children }) => {
-  const query = useQueryClient();
-  const [state, dispatch] = React.useReducer<
-    AuthReducerState,
-    [AuthReducerAction]
-  >(AuthReducer, {
-    status: "PENDING",
-    token: undefined,
-    user: undefined,
-  });
-
-  const signIn = React.useCallback(
-    (props: SignInResponse, expiresAt?: Date) => {
-      dispatch({
-        type: "SIGN_IN",
-        props,
-      });
-
-      query.setQueryData([authCookiesKey.user], props.user);
-      query.setQueryData([authCookiesKey.token], props.token);
-
-      const serializedToken = serialize(props.token);
-      const serializedUser = serialize(props.user);
-
-      let expires: Date;
-
-      if (!props.token.expiresAt) {
-        expires = expiresAt || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      } else {
-        expires = new Date(props.token.expiresAt);
-      }
-
-      const options: Cookies.CookieAttributes = {
-        secure: true,
-        sameSite: "Strict",
-        path: "/",
-        expires,
-      };
-
-      Cookies.set(authCookiesKey.token, serializedToken, options);
-      window.localStorage.setItem(authCookiesKey.user, serializedUser);
-    },
-    [dispatch, query],
-  );
-
-  const signOut = React.useCallback(() => {
-    dispatch({
-      type: "SIGN_OUT",
+export const AuthContextProvider: AuthContextProviderProps = React.memo(
+  ({ children }) => {
+    const query = useQueryClient();
+    const signOutMutation = useSignOutMutation();
+    const [state, dispatch] = React.useReducer<
+      AuthReducerState,
+      [AuthReducerAction]
+    >(AuthReducer, {
+      status: "PENDING",
+      token: undefined,
+      user: undefined,
     });
 
-    query.clear();
+    const signIn = React.useCallback(
+      (props: SignInResponse, expiresAt?: Date) => {
+        dispatch({
+          type: "SIGN_IN",
+          props,
+        });
 
-    Cookies.remove(authCookiesKey.token);
-    window.localStorage.removeItem(authCookiesKey.user);
-  }, [dispatch, query]);
+        query.setQueryData([authCookiesKey.user], props.user);
+        query.setQueryData([authCookiesKey.token], props.token);
 
-  const updateCurrentUser = React.useCallback(
-    (user: CurrentUser) => {
+        setUserCredentials({ token: props.token, user: props.user, expiresAt });
+      },
+      [dispatch, query],
+    );
+
+    const deleteUserCredentials = React.useCallback(() => {
       dispatch({
-        type: "UPDATE_USER",
-        props: user,
+        type: "SIGN_OUT",
       });
 
-      query.setQueryData([authCookiesKey.user], {
-        ...state.user,
-        ...user,
-      });
+      query.removeQueries({ queryKey: [authCookiesKey.user] });
+      query.removeQueries({ queryKey: [authCookiesKey.token] });
 
-      const serializedUser = serialize(user);
-      window.localStorage.setItem(authCookiesKey.user, serializedUser);
-    },
-    [dispatch, query, state.user],
-  );
+      removeUserCredentials();
+    }, [dispatch, query]);
 
-  useIsomorphicLayoutEffect(() => {
-    const serializeToken = Cookies.get(authCookiesKey.token);
-    const serializeUser =
-      window.localStorage.getItem(authCookiesKey.user) || undefined;
+    const signOut = React.useCallback(async () => {
+      try {
+        await signOutMutation.mutateAsync();
+        deleteUserCredentials();
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.status === HttpStatusCode.Unauthorized) {
+            deleteUserCredentials();
+          }
+        }
+      }
+    }, [signOutMutation, deleteUserCredentials]);
 
-    if (
-      typeof serializeToken !== "undefined" &&
-      typeof serializeUser !== "undefined"
-    ) {
-      const parseToken = deserialize<AuthToken>(serializeToken);
-      const parseUser = deserialize<CurrentUser>(serializeUser);
-      if (
-        typeof parseToken !== "undefined" &&
-        typeof parseUser !== "undefined"
-      ) {
+    const updateCurrentUser = React.useCallback(
+      (user: CurrentUser) => {
+        dispatch({
+          type: "UPDATE_USER",
+          props: user,
+        });
+
+        query.setQueriesData(
+          { queryKey: [authCookiesKey.user] },
+          (currentUser?: CurrentUser) => ({ ...currentUser, ...user }),
+        );
+
+        const serializedUser = serialize(user);
+        window.localStorage.setItem(authCookiesKey.user, serializedUser);
+      },
+      [dispatch, query],
+    );
+
+    useIsomorphicLayoutEffect(() => {
+      const userCredentials = getUserCredentials();
+      if (typeof userCredentials !== "undefined") {
+        const { token, user } = userCredentials;
         dispatch({
           type: "SIGN_IN",
           props: {
-            token: parseToken,
-            user: parseUser,
+            token,
+            user,
           },
         });
 
-        query.setQueryData([authCookiesKey.user], parseUser);
-        query.setQueryData([authCookiesKey.token], parseToken);
+        query.setQueryData([authCookiesKey.user], user);
+        query.setQueryData([authCookiesKey.token], token);
+
         return;
       }
-    }
-    dispatch({ type: "SIGN_OUT" });
-  }, [dispatch, query]);
+      dispatch({ type: "SIGN_OUT" });
+    }, [dispatch, query]);
 
-  const authContextValues = React.useMemo<AuthContextValues>(
-    () => ({
-      signIn,
-      signOut,
-      status: state.status,
-      token: state.token,
-      user: state.user,
-      updateCurrentUser,
-    }),
-    [signIn, signOut, state, updateCurrentUser],
-  );
+    const authContextValues = React.useMemo<AuthContextValues>(
+      () => ({
+        signIn,
+        signOut,
+        status: state.status,
+        token: state.token,
+        user: state.user,
+        updateCurrentUser,
+        deleteUserCredentials,
+        getUserCredentials,
+        setUserCredentials,
+        removeUserCredentials,
+      }),
+      [signIn, signOut, state, updateCurrentUser, deleteUserCredentials],
+    );
 
-  return <AuthContext value={authContextValues}>{children}</AuthContext>;
-};
+    return <AuthContext value={authContextValues}>{children}</AuthContext>;
+  },
+);
+AuthContextProvider.displayName = "AuthContextProvider";

@@ -1,6 +1,6 @@
 import type React from "react";
 import { ScrollArea, type ScrollAreaProps } from "~/components/ui/scroll-area";
-import { useSidebar } from "~/components/ui/sidebar";
+import { useSidebar } from "~/hooks/sidebar";
 import { cn } from "~/lib/utils";
 
 type PrivateContainerProps = React.FC<
@@ -14,6 +14,7 @@ const PrivateContainer: PrivateContainerProps = ({
   ...props
 }) => {
   const { variant } = useSidebar();
+
   if (scrollable) {
     return (
       <ScrollArea

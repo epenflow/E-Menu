@@ -10,17 +10,21 @@ export type SignInResponse = {
 };
 export type SignInSchema = z.infer<typeof signInSchema>;
 
-export type AuthState =
-  | "AUTHENTICATED"
-  | "UNAUTHENTICATED"
-  | "PENDING"
-  | "UPDATE_USER";
+export type AuthState = "AUTHENTICATED" | "UNAUTHENTICATED" | "PENDING";
 
 export type AuthContextValues = {
   status: AuthState;
   signIn: (props: SignInResponse, expiresAt?: Date) => void;
   signOut: VoidFunction;
   updateCurrentUser: (user: CurrentUser) => void;
+  deleteUserCredentials: VoidFunction;
+  removeUserCredentials: VoidFunction;
+  setUserCredentials: (props: {
+    token: AuthToken;
+    user: CurrentUser;
+    expiresAt?: Date;
+  }) => void;
+  getUserCredentials: () => { user: CurrentUser; token: AuthToken } | undefined;
   user?: CurrentUser;
   token?: AuthToken;
 };

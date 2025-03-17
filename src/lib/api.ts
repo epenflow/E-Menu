@@ -3,10 +3,7 @@ import axios, {
   type Method,
   type RawAxiosRequestHeaders,
 } from "axios";
-import Cookies from "js-cookie";
-import { authCookiesKey } from "./services/auth";
-import type { AuthToken } from "./types";
-import { assertIsDefined, deserialize } from "./utils";
+import { getUserCredentials } from "./services/auth";
 
 export const baseURL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";
@@ -24,15 +21,13 @@ export const apiToken = ():
   | (RawAxiosRequestHeaders & MethodsHeaders)
   | AxiosHeaders
   | undefined => {
-  const serializeToken = Cookies.get(authCookiesKey.token);
+  const userCredentials = getUserCredentials();
 
-  if (typeof serializeToken !== "undefined") {
-    const parseToken = deserialize<AuthToken>(serializeToken);
-
-    assertIsDefined(parseToken);
+  if (typeof userCredentials !== "undefined") {
+    const { token } = userCredentials;
 
     return {
-      Authorization: `Bearer ${parseToken.token}`,
+      Authorization: `Bearer ${token.token}`,
     };
   }
 

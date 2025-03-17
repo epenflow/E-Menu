@@ -4,4 +4,5 @@ export const authCookiesKey = {
 };
 export const authQueryKey = {
   signIn: ["sign-in"],
+  signOut: ["sign-out"],
 };

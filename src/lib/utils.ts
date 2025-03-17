@@ -58,3 +58,13 @@ export const getInitials = (value?: string | null): string => {
 
   return `${firstInitial}${lastInitial}`.toUpperCase();
 };
+
+export const isTokenExpires = (expiresAt?: Date | null) => {
+  if (expiresAt && typeof expiresAt !== "undefined") {
+    const expires = new Date(expiresAt);
+    const now = new Date(Date.now() - 1000 * 60);
+
+    return now > expires;
+  }
+  return true;
+};
