@@ -1,9 +1,9 @@
 import React from "react";
-import { useFormContext } from "~/hooks/form";
+import { useFormContext } from "~/hooks/form-hook";
 import { cn } from "~/lib/utils";
 
 type FormMessage = React.ComponentProps<"p">;
-export const FormMessage: React.FC<FormMessage> = ({ className, ...props }) => {
+const FormMessage: React.FC<FormMessage> = ({ className, ...props }) => {
   const field = useFormContext();
 
   return (
@@ -24,3 +24,4 @@ export const FormMessage: React.FC<FormMessage> = ({ className, ...props }) => {
     />
   );
 };
+export default FormMessage;

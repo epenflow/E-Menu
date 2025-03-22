@@ -1,21 +1,33 @@
+import { Link } from "@tanstack/react-router";
+import { BookUser } from "lucide-react";
 import React from "react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
 } from "~/components/ui/sidebar";
 
 const PrivateSidebar = () => {
-  const { NavUser, NavHeader } = resources;
+  const { SidebarFooterItem } = resources;
+
   return (
     <Sidebar>
-      <SidebarHeader>
-        <NavHeader />
-      </SidebarHeader>
-      <SidebarContent></SidebarContent>
+      <SidebarHeader></SidebarHeader>
+      <SidebarContent>
+        <SidebarMenu>
+          <SidebarMenuButton asChild>
+            <Link to="/role">
+              <BookUser />
+              <span>Role</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenu>
+      </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <SidebarFooterItem />
       </SidebarFooter>
     </Sidebar>
   );
@@ -23,10 +35,7 @@ const PrivateSidebar = () => {
 export default PrivateSidebar;
 
 const resources = {
-  NavUser: React.lazy(
-    () => import("~/components/base/private/sidebar/nav-user"),
-  ),
-  NavHeader: React.lazy(
-    () => import("~/components/base/private/sidebar/nav-header"),
+  SidebarFooterItem: React.lazy(
+    () => import("~/components/sidebar/sidebar-footer-item"),
   ),
 };

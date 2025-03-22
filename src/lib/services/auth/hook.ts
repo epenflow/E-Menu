@@ -1,9 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { useAppForm, useFormOnSubmitAsyncValidator } from "~/hooks/form";
+import {
+  useAppForm,
+  useFormHookOnSubmitAsyncValidator,
+} from "~/hooks/form-hook";
+import { apiSignIn, apiSignOut } from "./api";
 import { authQueryKey } from "./constant";
 import { AuthContext } from "./context";
-import { signInMutationFn, signOutMutationFn } from "./query";
 import { signInSchema } from "./schema";
 import type { SignInSchema } from "./type";
 
@@ -21,7 +24,7 @@ const useSignInMutation = () => {
 
   return useMutation({
     mutationKey: authQueryKey.signIn,
-    mutationFn: signInMutationFn,
+    mutationFn: apiSignIn,
     onSuccess: ({ data, message }) => {
       console.log(data);
       if (typeof data !== "undefined") {
@@ -39,7 +42,7 @@ const useSignInMutation = () => {
 
 export const useSignInForm = () => {
   const signInMutation = useSignInMutation();
-  const onSubmitAsync = useFormOnSubmitAsyncValidator(
+  const onSubmitAsync = useFormHookOnSubmitAsyncValidator(
     signInMutation.mutateAsync,
   );
 
@@ -60,6 +63,6 @@ export const useSignInForm = () => {
 export const useSignOutMutation = () => {
   return useMutation({
     mutationKey: authQueryKey.signOut,
-    mutationFn: signOutMutationFn,
+    mutationFn: apiSignOut,
   });
 };

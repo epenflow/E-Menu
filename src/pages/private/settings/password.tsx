@@ -1,20 +1,17 @@
-import type { DeepKeys } from "@tanstack/react-form";
-import type { HTMLInputAutoCompleteAttribute } from "react";
-import { Button } from "~/components/ui/button";
 import { InputPassword } from "~/components/ui/input";
 import { Block, Heading, Text } from "~/components/ui/typography";
 import For from "~/components/utils/for";
-import { useFormOnSubmit } from "~/hooks/form";
+import { useFormHookOnSubmit } from "~/hooks/form-hook";
 import SettingsLayout from "~/layouts/settings-layout";
 import {
   useUpdatePasswordForm,
-  type UpdatePasswordSchema,
+  type UpdatePasswordSchemaField,
 } from "~/lib/services/profile";
 
 const Password = () => {
   const { updatePasswordFields } = resources;
-  const updatePasswordForm = useUpdatePasswordForm();
-  const onSubmit = useFormOnSubmit(updatePasswordForm.handleSubmit);
+  const form = useUpdatePasswordForm();
+  const onSubmit = useFormHookOnSubmit(form.handleSubmit);
 
   return (
     <SettingsLayout>
@@ -32,50 +29,38 @@ const Password = () => {
           <For
             each={updatePasswordFields}
             children={({ name, label, autoComplete }, key) => (
-              <updatePasswordForm.AppField
+              <form.AppField
                 key={`${key}-${name}`}
                 name={name}
                 children={(field) => (
-                  <field.FieldItem>
-                    <field.FieldLabel>{label}</field.FieldLabel>
-                    <field.FieldControl>
+                  <field.FormFieldItem>
+                    <field.FormFieldLabel>{label}</field.FormFieldLabel>
+                    <field.FormFieldControl>
                       <InputPassword
                         autoComplete={autoComplete}
                         value={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                         placeholder="********"
                       />
-                    </field.FieldControl>
-                    <field.FieldMessage />
-                  </field.FieldItem>
+                    </field.FormFieldControl>
+                    <field.FormFieldMessage />
+                  </field.FormFieldItem>
                 )}
               />
             )}
           />
 
-          <updatePasswordForm.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
-            children={([canSubmit, isSubmitting]) => (
-              <Button
-                type="submit"
-                disabled={!canSubmit}
-                isPending={isSubmitting}>
-                {isSubmitting ? "Saving..." : "Save"}
-              </Button>
-            )}
-          />
+          <form.AppForm>
+            <form.FormButton>
+              {({ isPending }) => (isPending ? "Updating..." : "Update")}
+            </form.FormButton>
+          </form.AppForm>
         </form>
       </div>
     </SettingsLayout>
   );
 };
 export default Password;
-
-type Field = {
-  name: DeepKeys<UpdatePasswordSchema>;
-  label: string;
-  autoComplete: HTMLInputAutoCompleteAttribute;
-};
 
 const resources = {
   updatePasswordFields: [
@@ -94,5 +79,5 @@ const resources = {
       label: "Confirm Password",
       autoComplete: "new-password",
     },
-  ] satisfies Field[],
+  ] satisfies UpdatePasswordSchemaField[],
 };

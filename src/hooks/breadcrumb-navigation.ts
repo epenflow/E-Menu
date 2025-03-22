@@ -19,8 +19,16 @@ const breadcrumbRoutes: Partial<
     { title: "Settings" },
     { title: "Password", isPage: true },
   ],
+  "/role": [
+    { title: "Dashboard", to: "/dashboard" },
+    { title: "Role", isPage: true },
+  ],
+  "/sign-in": [
+    { title: "Home", to: "/" },
+    { title: "Sign-In", isPage: true },
+  ],
 };
-const useBreadcrumbs = () => {
+const useBreadcrumbNavigation = () => {
   const { pathname } = useLocation();
 
   const toRoute = React.useCallback(
@@ -38,4 +46,4 @@ const useBreadcrumbs = () => {
     return [];
   }, [pathname, toRoute]);
 };
-export default useBreadcrumbs;
+export default useBreadcrumbNavigation;

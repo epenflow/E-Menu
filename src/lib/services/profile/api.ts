@@ -2,7 +2,7 @@ import api, { apiToken } from "~/lib/api";
 import type { ApiSuccessResponse, User } from "~/lib/types";
 import type { UpdatePasswordSchema, UpdateProfileSchema } from "./type";
 
-export const updateProfileMutationFn = async (props: UpdateProfileSchema) => {
+export const apiUpdateProfile = async (props: UpdateProfileSchema) => {
   const { data } = await api.patch<ApiSuccessResponse<User>>(
     "/profile/update-profile",
     props,
@@ -15,7 +15,7 @@ export const updateProfileMutationFn = async (props: UpdateProfileSchema) => {
   return data;
 };
 
-export const updatePasswordMutationFn = async (props: UpdatePasswordSchema) => {
+export const apiUpdateProfilePassword = async (props: UpdatePasswordSchema) => {
   const { data } = await api.patch("/profile/update-password", props, {
     headers: apiToken(),
     withCredentials: true,

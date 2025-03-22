@@ -47,12 +47,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-
-  --private-header-offset: calc(1px + --spacing(14));
-  --private-container-height-inset: calc(
-    100dvh - calc(var(--private-header-offset) + --spacing(4))
-  );
-  --private-container-height: calc(100dvh - var(--private-header-offset));
 }
 
 .dark {
@@ -212,7 +206,81 @@
     @apply bg-background text-foreground;
   }
 }
-@theme private {
+:root {
+  --private-header-offset: calc(1px + --spacing(14));
+  --private-container-height-inset: calc(
+    100dvh - calc(var(--private-header-offset) + --spacing(4))
+  );
+  --private-container-height: calc(100dvh - var(--private-header-offset));
+
+  --boxes-background: transparent;
+  --boxes-opacity: 1;
+  --boxes-color: var(--border);
+  --boxes-size: 1px;
+  --boxes-space: 20px 20px;
+
+  --polka-background: transparent;
+  --polka-opacity: 1;
+  --polka-color: var(--border);
+  --polka-size: 1px;
+  --polka-space: 10px 10px;
+
+  --diagonal-background: transparent;
+  --diagonal-opacity: 1;
+  --diagonal-rotation: 45deg;
+  --diagonal-color: var(--border);
+  --diagonal-size: 1px;
+  --diagonal-space: 50px;
+}
+
+@theme inline {
   --height-private-container: var(--private-container-height);
   --height-private-container-inset: var(--private-container-height-inset);
+}
+
+/*
+--- Diagonal Pattern ---
+*/
+@utility pattern-diagonal {
+  background-color: var(--diagonal-background);
+  opacity: var(--diagonal-opacity);
+  background: repeating-linear-gradient(
+    var(--diagonal-rotation),
+    var(--diagonal-color),
+    var(--diagonal-color) var(--diagonal-size),
+    var(--diagonal-background) var(--diagonal-size),
+    var(--diagonal-background) var(--diagonal-space)
+  );
+}
+
+/*
+--- Boxes Pattern ---
+*/
+@utility pattern-boxes {
+  background-color: var(--boxes-background);
+  opacity: var(--boxes-opacity);
+  background-image:
+    linear-gradient(
+      var(--boxes-color) var(--boxes-size),
+      transparent var(--boxes-size)
+    ),
+    linear-gradient(
+      to right,
+      var(--boxes-color) var(--boxes-size),
+      var(--boxes-background) var(--boxes-size)
+    );
+  background-size: var(--boxes-space);
+}
+
+/*
+--- Polka Pattern ---
+*/
+@utility pattern-polka {
+  background-color: var(--polka-background);
+  opacity: var(--polka-opacity);
+  background-image: radial-gradient(
+    var(--polka-color) var(--polka-size),
+    var(--polka-background) var(--polka-size)
+  );
+  background-size: var(--polka-space);
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import * as z from "zod";
-import type { AuthToken, Role, User } from "~/lib/types";
+import type { AuthToken, FormFieldSchema, Role, User } from "~/lib/types";
 import type { signInSchema } from "./schema";
 
 export type CurrentUser = User<{ role: Role }>;
@@ -41,3 +41,7 @@ export type AuthReducerAction =
   | { type: "UPDATE_USER"; props: CurrentUser };
 
 export type AuthContextProviderProps = React.FC<React.PropsWithChildren>;
+export type SignInFieldSchema<T = undefined> = FormFieldSchema<
+  SignInSchema,
+  T
+>[];

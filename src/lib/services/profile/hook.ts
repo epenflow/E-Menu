@@ -1,7 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { useAppForm, useFormOnSubmitAsyncValidator } from "~/hooks/form";
+import {
+  useAppForm,
+  useFormHookOnSubmitAsyncValidator,
+} from "~/hooks/form-hook";
 import { useAuth } from "../auth";
-import { updatePasswordMutationFn, updateProfileMutationFn } from "./query";
+import { apiUpdateProfile, apiUpdateProfilePassword } from "./api";
 import { updatePasswordSchema, updateProfileSchema } from "./schema";
 import type { UpdatePasswordSchema, UpdateProfileSchema } from "./type";
 
@@ -12,7 +15,7 @@ const useUpdateProfileMutation = () => {
    */
   return useMutation({
     mutationKey: ["update-profile"],
-    mutationFn: updateProfileMutationFn,
+    mutationFn: apiUpdateProfile,
     onSuccess: ({ data }) => {
       if (typeof data !== "undefined") {
         updateCurrentUser({
@@ -27,7 +30,7 @@ const useUpdateProfileMutation = () => {
 export const useUpdateProfileForm = () => {
   const { user } = useAuth();
   const updateProfileMutation = useUpdateProfileMutation();
-  const onSubmitAsync = useFormOnSubmitAsyncValidator(
+  const onSubmitAsync = useFormHookOnSubmitAsyncValidator(
     updateProfileMutation.mutateAsync,
   );
 
@@ -54,7 +57,7 @@ const useUpdatePasswordMutation = () => {
 
   return useMutation({
     mutationKey: ["update-password"],
-    mutationFn: updatePasswordMutationFn,
+    mutationFn: apiUpdateProfilePassword,
     onSuccess: (data) => {
       console.log(data);
     },
@@ -63,7 +66,7 @@ const useUpdatePasswordMutation = () => {
 
 export const useUpdatePasswordForm = () => {
   const updatePasswordMutation = useUpdatePasswordMutation();
-  const onSubmitAsync = useFormOnSubmitAsyncValidator(
+  const onSubmitAsync = useFormHookOnSubmitAsyncValidator(
     updatePasswordMutation.mutateAsync,
   );
 

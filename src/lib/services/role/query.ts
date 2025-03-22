@@ -1,17 +1,11 @@
-import type { QueryFunctionContext } from "@tanstack/react-query";
-import { paginationSchema } from "~/hooks/pagination";
-import api, { apiToken } from "~/lib/api";
-import type { AllRoleResponse } from "./type";
+import { queryOptions } from "@tanstack/react-query";
+import type { PaginationSchema } from "~/hooks/pagination";
+import { roleQueryKey } from "./api";
 
-export const allRoleQueryFn = async (ctx: QueryFunctionContext) => {
-  const params = paginationSchema.parse(ctx.meta);
-
-  const { data } = await api.get<AllRoleResponse>("/role", {
-    params,
-    headers: {
-      ...apiToken(),
-    },
+export const allRoleQueryOptions = (ctx: PaginationSchema) => {
+  return queryOptions({
+    ...roleQueryKey.all(ctx),
+    meta: ctx,
+    staleTime: 1000 * 60 * 60,
   });
-
-  return data;
 };

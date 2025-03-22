@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError, HttpStatusCode } from "axios";
 import React from "react";
-import useIsomorphicLayoutEffect from "~/hooks/isomorphic-layout-effect";
 import { serialize } from "~/lib/utils";
 import { authCookiesKey } from "./constant";
 import { AuthContext } from "./context";
@@ -91,7 +90,7 @@ export const AuthContextProvider: AuthContextProviderProps = React.memo(
       [dispatch, query],
     );
 
-    useIsomorphicLayoutEffect(() => {
+    React.useEffect(() => {
       const userCredentials = getUserCredentials();
       if (typeof userCredentials !== "undefined") {
         const { token, user } = userCredentials;

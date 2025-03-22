@@ -7,7 +7,7 @@ const PrivateLayout = () => {
   return (
     <SidebarProvider variant="inset">
       <PrivateSidebar />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-auto">
         <PrivateHeader />
         <Outlet />
       </SidebarInset>

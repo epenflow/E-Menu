@@ -1,19 +1,17 @@
-import type { DeepKeys } from "@tanstack/react-form";
-import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Block, Heading, Text } from "~/components/ui/typography";
 import For from "~/components/utils/for";
-import { useFormOnSubmit } from "~/hooks/form";
+import { useFormHookOnSubmit } from "~/hooks/form-hook";
 import SettingsLayout from "~/layouts/settings-layout";
 import {
   useUpdateProfileForm,
-  type UpdateProfileSchema,
+  type UpdateProfileSchemaField,
 } from "~/lib/services/profile";
 
 const Profile = () => {
-  const { nameFields, credentialFields } = resources;
-  const updateProfileForm = useUpdateProfileForm();
-  const onSubmit = useFormOnSubmit(updateProfileForm.handleSubmit);
+  const { userInfoFields, userCredentialFields } = resources;
+  const updateForm = useUpdateProfileForm();
+  const onSubmit = useFormHookOnSubmit(updateForm.handleSubmit);
 
   return (
     <SettingsLayout>
@@ -30,22 +28,22 @@ const Profile = () => {
         <form className="space-y-4" onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-2">
             <For
-              each={nameFields}
+              each={userInfoFields}
               children={({ name, label }, key) => (
-                <updateProfileForm.AppField
+                <updateForm.AppField
                   key={`${name}-${key}`}
                   name={name}
                   children={(field) => (
-                    <field.FieldItem>
-                      <field.FieldLabel>{label}</field.FieldLabel>
-                      <field.FieldControl>
+                    <field.FormFieldItem>
+                      <field.FormFieldLabel>{label}</field.FormFieldLabel>
+                      <field.FormFieldControl>
                         <Input
                           defaultValue={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
-                      </field.FieldControl>
-                      <field.FieldMessage />
-                    </field.FieldItem>
+                      </field.FormFieldControl>
+                      <field.FormFieldMessage />
+                    </field.FormFieldItem>
                   )}
                 />
               )}
@@ -53,38 +51,32 @@ const Profile = () => {
           </div>
 
           <For
-            each={credentialFields}
+            each={userCredentialFields}
             children={({ name, label }, key) => (
-              <updateProfileForm.AppField
+              <updateForm.AppField
                 key={`${name}-${key}`}
                 name={name}
                 children={(field) => (
-                  <field.FieldItem>
-                    <field.FieldLabel>{label}</field.FieldLabel>
-                    <field.FieldControl>
+                  <field.FormFieldItem>
+                    <field.FormFieldLabel>{label}</field.FormFieldLabel>
+                    <field.FormFieldControl>
                       <Input
                         defaultValue={field.state.value}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
-                    </field.FieldControl>
-                    <field.FieldMessage />
-                  </field.FieldItem>
+                    </field.FormFieldControl>
+                    <field.FormFieldMessage />
+                  </field.FormFieldItem>
                 )}
               />
             )}
           />
 
-          <updateProfileForm.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
-            children={([canSubmit, isSubmitting]) => (
-              <Button
-                type="submit"
-                isPending={isSubmitting}
-                disabled={!canSubmit}>
-                {isSubmitting ? "Saving..." : "Save"}
-              </Button>
-            )}
-          />
+          <updateForm.AppForm>
+            <updateForm.FormButton>
+              {({ isPending }) => (isPending ? "Updating..." : "Update")}
+            </updateForm.FormButton>
+          </updateForm.AppForm>
         </form>
       </div>
     </SettingsLayout>
@@ -92,17 +84,13 @@ const Profile = () => {
 };
 export default Profile;
 
-type Fields = {
-  name: DeepKeys<UpdateProfileSchema>;
-  label: string;
-};
 const resources = {
-  nameFields: [
+  userInfoFields: [
     { name: "fName", label: "First name" },
     { name: "lName", label: "Last name" },
-  ] satisfies Fields[],
-  credentialFields: [
+  ] satisfies UpdateProfileSchemaField[],
+  userCredentialFields: [
     { name: "username", label: "Username" },
     { name: "email", label: "Email" },
-  ] satisfies Fields[],
+  ] satisfies UpdateProfileSchemaField[],
 };

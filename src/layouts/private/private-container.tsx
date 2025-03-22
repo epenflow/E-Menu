@@ -19,7 +19,7 @@ const PrivateContainer: PrivateContainerProps = ({
     return (
       <ScrollArea
         className={cn(
-          "px-4",
+          "p-4 w-auto",
           {
             "max-h-private-container h-private-container":
               variant === "sidebar",

@@ -1,4 +1,4 @@
-import type { FormApi } from "@tanstack/react-form";
+import type React from "react";
 
 export type Paginator = {
   total: number;
@@ -14,7 +14,7 @@ export type Paginator = {
 
 export type PaginateResponse<T = undefined> = {
   meta: Paginator;
-  data: T;
+  items: T;
 };
 export type AuthToken = {
   type: string;
@@ -52,9 +52,9 @@ export type ApiBaseResponse<T = undefined> = {
   status: number;
   message: string;
 } & T;
-export type ApiSuccessResponse<T = undefined> = ApiBaseResponse<{
-  data?: T;
-}>;
+export type ApiSuccessResponse<T = undefined> = ApiBaseResponse<
+  T extends undefined ? { data?: T } : { data: T }
+>;
 export type BaseErrorResponse =
   | { field: string; message: string; rule?: string; meta?: unknown }
   | { message: string };
@@ -62,9 +62,15 @@ export type BaseErrorResponse =
 export type ApiErrorResponse<T = BaseErrorResponse> = ApiBaseResponse<{
   errors?: T[];
 }>;
-export type OnSubmitAsyncValidatorProps<T> = {
-  value: T;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formApi: FormApi<T, any, any, any, any, any, any, any, any, any>;
-  signal: AbortSignal;
+
+type FormFieldBaseSchema<S> = {
+  name: keyof S;
+  label?: string;
+  placeholder?: string;
+  description?: string;
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
+  type?: React.HTMLInputTypeAttribute;
 };
+export type FormFieldSchema<S, T = undefined> = T extends undefined
+  ? FormFieldBaseSchema<S>
+  : FormFieldBaseSchema<S> & T;
