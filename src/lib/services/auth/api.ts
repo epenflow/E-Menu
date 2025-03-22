@@ -1,5 +1,5 @@
 import type { ApiSuccessResponse } from "~/lib/types";
-import api, { apiToken } from "../../api";
+import api, { apiConfigWithCredentials } from "../../api";
 import type { SignInResponse, SignInSchema } from "./type";
 
 export const apiSignIn = async (props: SignInSchema) => {
@@ -14,10 +14,11 @@ export const apiSignIn = async (props: SignInSchema) => {
 };
 
 export const apiSignOut = async () => {
-  const { data } = await api.post<ApiSuccessResponse>("/auth/sign-out", null, {
-    headers: apiToken(),
-    withCredentials: true,
-  });
+  const { data } = await api.post<ApiSuccessResponse>(
+    "/auth/sign-out",
+    null,
+    apiConfigWithCredentials(),
+  );
 
   return data;
 };

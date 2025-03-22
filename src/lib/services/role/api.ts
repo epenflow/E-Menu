@@ -1,7 +1,7 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import type { QueryFunctionContext } from "@tanstack/react-query";
 import { paginationSchema, type PaginationSchema } from "~/hooks/pagination";
-import api, { apiToken } from "~/lib/api";
+import api, { apiConfigWithCredentials } from "~/lib/api";
 import type { ApiSuccessResponse } from "~/lib/types";
 import type { AllRoleResponse } from "./type";
 
@@ -12,8 +12,7 @@ export const allRoleQueryFn = async (
 
   const { data } = await api.get<ApiSuccessResponse<AllRoleResponse>>("/role", {
     params,
-    headers: apiToken(),
-    withCredentials: true,
+    ...apiConfigWithCredentials(),
   });
   const formattedItemData = data.data.items.map((item) => ({
     ...item,

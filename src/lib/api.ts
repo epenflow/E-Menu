@@ -1,5 +1,6 @@
 import axios, {
   type AxiosHeaders,
+  type AxiosRequestConfig,
   type Method,
   type RawAxiosRequestHeaders,
 } from "axios";
@@ -32,4 +33,22 @@ export const apiToken = ():
   }
 
   return undefined;
+};
+
+export const apiConfigWithCredentials = (): AxiosRequestConfig => {
+  const userCredentials = getUserCredentials();
+  if (userCredentials) {
+    const {
+      token: { token },
+    } = userCredentials;
+
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    };
+  }
+
+  return Object.create(null);
 };
