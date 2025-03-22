@@ -9,7 +9,7 @@ const Pages = () => {
       <Outlet />
       <Invoke />
       <TanstackQueryDevTools />
-      <TanstackRouterDevTools position="top-right" />
+      <TanstackRouterDevTools />
     </React.Suspense>
   );
 };

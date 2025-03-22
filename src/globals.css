@@ -231,11 +231,15 @@
   --diagonal-color: var(--border);
   --diagonal-size: 1px;
   --diagonal-space: 50px;
+
+  --app-header-offset-height: calc(1px + --spacing(12));
+  --app-container-height: calc(100dvh - var(--app-header-offset-height));
 }
 
 @theme inline {
   --height-private-container: var(--private-container-height);
   --height-private-container-inset: var(--private-container-height-inset);
+  --height-app-container: var(--app-container-height);
 }
 
 /*
