@@ -112,11 +112,9 @@ export const AuthContextProvider: AuthContextProviderProps = React.memo(
 
     const authContextValues = React.useMemo<AuthContextValues>(
       () => ({
+        ...state,
         signIn,
         signOut,
-        status: state.status,
-        token: state.token,
-        user: state.user,
         updateCurrentUser,
         deleteUserCredentials,
         getUserCredentials,
