@@ -1,4 +1,4 @@
-import { Lock, Mail, type LucideIcon } from "lucide-react";
+import { Lock, User, type LucideIcon } from "lucide-react";
 import { Input, InputPassword } from "~/components/ui/input";
 import For from "~/components/utils/for";
 import { useFormHookOnSubmit } from "~/hooks/form-hook";
@@ -76,7 +76,7 @@ const resources = {
       autoComplete: "username",
       description: "Enter your username",
       placeholder: "example",
-      icon: Mail,
+      icon: User,
     },
     {
       name: "password",
