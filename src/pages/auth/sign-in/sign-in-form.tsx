@@ -54,11 +54,13 @@ const SignInForm = () => {
           )}
         />
       </div>
+
       <signInForm.AppForm>
         <signInForm.FormMessage />
       </signInForm.AppForm>
       <signInForm.AppForm>
         <signInForm.FormButton
+          className="w-full"
           children={(props) => (props.isPending ? "Submitting..." : "Submit")}
         />
       </signInForm.AppForm>

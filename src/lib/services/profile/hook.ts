@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
   useAppForm,
   useFormHookOnSubmitAsyncValidator,
@@ -10,19 +11,20 @@ import type { UpdatePasswordSchema, UpdateProfileSchema } from "./type";
 
 const useUpdateProfileMutation = () => {
   const { user, updateCurrentUser } = useAuth();
-  /**
-   * @todo - toast success message
-   */
+
   return useMutation({
     mutationKey: ["update-profile"],
     mutationFn: apiUpdateProfile,
-    onSuccess: ({ data }) => {
-      if (typeof data !== "undefined") {
-        updateCurrentUser({
-          ...data,
-          role: user!.role,
-        });
-      }
+    onSuccess: async ({ data, message }) => {
+      toast.success(message);
+      setTimeout(() => {
+        if (typeof data !== "undefined") {
+          updateCurrentUser({
+            ...data,
+            role: user!.role,
+          });
+        }
+      }, 0.5 * 1000);
     },
   });
 };
@@ -58,8 +60,8 @@ const useUpdatePasswordMutation = () => {
   return useMutation({
     mutationKey: ["update-password"],
     mutationFn: apiUpdateProfilePassword,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: ({ message }) => {
+      toast.success(message);
     },
   });
 };

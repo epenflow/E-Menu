@@ -10,7 +10,7 @@ import ContainerLayout, {
 
 const SectionHero = () => {
   return (
-    <ContainerLayout>
+    <ContainerLayout id="hero">
       <ContainerInnerLayout>
         <Badge variant="secondary" className="relative z-10">
           Restaurant Point of Sale

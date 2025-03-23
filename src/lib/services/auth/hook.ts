@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
+import { toast } from "sonner";
 import {
   useAppForm,
   useFormHookOnSubmitAsyncValidator,
@@ -26,16 +27,12 @@ const useSignInMutation = () => {
     mutationKey: authQueryKey.signIn,
     mutationFn: apiSignIn,
     onSuccess: ({ data, message }) => {
-      console.log(data);
-      if (typeof data !== "undefined") {
-        signIn(data);
-      }
-      /**
-       * @todo - Toast
-       */
-      if (message) {
-        console.log(message);
-      }
+      toast.success(message);
+      setTimeout(() => {
+        if (typeof data !== "undefined") {
+          signIn(data);
+        }
+      }, 0.5 * 1000);
     },
   });
 };

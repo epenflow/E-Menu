@@ -1,4 +1,4 @@
-import { ListOrdered, Menu, Wallet, type LucideIcon } from "lucide-react";
+import { ListOrdered, SquareMenu, Wallet, type LucideIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { CardOuter } from "~/components/ui/card";
 import Pattern from "~/components/ui/pattern";
@@ -13,7 +13,7 @@ const SectionFeature = () => {
   const { features } = resources;
 
   return (
-    <ContainerLayout className="h-full">
+    <ContainerLayout id="feature" className="h-full">
       <ContainerInnerLayout className="min-h-screen h-full py-10 overflow-clip">
         <Badge variant="secondary" className="relative z-10">
           Features
@@ -61,7 +61,7 @@ export default SectionFeature;
 const resources = {
   features: [
     {
-      icon: Menu,
+      icon: SquareMenu,
       label: "Digital Menus",
       description:
         "Beautiful, interactive menus that showcase your dishes with high-quality images and detailed descriptions.",

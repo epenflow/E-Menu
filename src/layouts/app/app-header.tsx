@@ -13,17 +13,24 @@ const AppHeader = () => {
       )}>
       <nav className="container border-x border-dashed h-12 flex items-center justify-between">
         <ul className="flex gap-2.5 items-center">
-          <For each={["E-Menu", "Features"]}>
-            {(char, key) => (
-              <li
+          <For
+            each={
+              [
+                { title: "E-Menu", id: "#hero" },
+                { title: "Features", id: "#feature" },
+              ] satisfies { title: string; id: string }[]
+            }>
+            {(value, key) => (
+              <a
+                href={value.id}
                 key={key}
                 className={cn(
                   buttonVariants({ variant: "link", size: "sm" }),
                   "px-0 text-xs",
-                  char !== "E-Menu" && "hidden md:inline-flex",
+                  value.title !== "E-Menu" && "hidden md:inline-flex",
                 )}>
-                {char}
-              </li>
+                {value.title}
+              </a>
             )}
           </For>
         </ul>

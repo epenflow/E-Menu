@@ -2,10 +2,12 @@ import { Outlet } from "@tanstack/react-router";
 import React from "react";
 
 const RootPage = () => {
-  const { TanstackRouterDevTools, TanstackQueryDevTools, Invoke } = resources;
+  const { TanstackRouterDevTools, TanstackQueryDevTools, Invoke, Toaster } =
+    resources;
 
   return (
     <React.Suspense>
+      <Toaster />
       <Outlet />
       <Invoke />
       <TanstackQueryDevTools />
@@ -32,4 +34,9 @@ const resources = {
     })),
   ),
   Invoke: React.lazy(() => import("~/components/utils/invoke")),
+  Toaster: React.lazy(() =>
+    import("~/components/ui/sonner").then(({ Toaster }) => ({
+      default: Toaster,
+    })),
+  ),
 };

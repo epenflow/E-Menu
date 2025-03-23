@@ -13,7 +13,7 @@ export const apiUpdateProfile = async (props: UpdateProfileSchema) => {
 };
 
 export const apiUpdateProfilePassword = async (props: UpdatePasswordSchema) => {
-  const { data } = await api.patch(
+  const { data } = await api.patch<ApiSuccessResponse>(
     "/profile/update-password",
     props,
     apiConfigWithCredentials(),
