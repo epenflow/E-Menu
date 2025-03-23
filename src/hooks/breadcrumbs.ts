@@ -28,7 +28,7 @@ const breadcrumbRoutes: Partial<
     { title: "Sign-In", isPage: true },
   ],
 };
-const useBreadcrumbNavigation = () => {
+const useBreadcrumbs = () => {
   const { pathname } = useLocation();
 
   const toRoute = React.useCallback(
@@ -46,4 +46,4 @@ const useBreadcrumbNavigation = () => {
     return [];
   }, [pathname, toRoute]);
 };
-export default useBreadcrumbNavigation;
+export default useBreadcrumbs;

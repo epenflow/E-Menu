@@ -1,4 +1,4 @@
-import BreadcrumbNavigation from "~/components/breadcrumb-navigation";
+import Breadcrumbs from "~/components/breadcrumbs";
 import Pattern from "~/components/ui/pattern";
 import {
   SignInCard,
@@ -13,7 +13,7 @@ const SignIn = () => {
       <Pattern pattern="polka" />
       <SignInCard>
         <SignInCardHeader>
-          <BreadcrumbNavigation />
+          <Breadcrumbs />
         </SignInCardHeader>
         <SignInCardContent>
           <SignInForm />

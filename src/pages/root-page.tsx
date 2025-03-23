@@ -1,7 +1,7 @@
 import { Outlet } from "@tanstack/react-router";
 import React from "react";
 
-const Pages = () => {
+const RootPage = () => {
   const { TanstackRouterDevTools, TanstackQueryDevTools, Invoke } = resources;
 
   return (
@@ -14,7 +14,7 @@ const Pages = () => {
   );
 };
 
-export default Pages;
+export default RootPage;
 
 const resources = {
   TanstackRouterDevTools: import.meta.env.DEV

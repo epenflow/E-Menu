@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
-import Root from "~/components/utils/root";
+import RootApp from "~/components/utils/root-app";
 
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
-  ReactDOM.createRoot(rootElement).render(<Root />);
+  ReactDOM.createRoot(rootElement).render(<RootApp />);
 }

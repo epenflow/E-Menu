@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import React from "react";
-import useBreadcrumbNavigation from "~/hooks/breadcrumb-navigation";
+import useBreadcrumbs from "~/hooks/breadcrumbs";
 import { cn } from "~/lib/utils";
 import {
   Breadcrumb,
@@ -13,10 +13,8 @@ import {
 import For from "./utils/for";
 
 type BreadcrumbNavigationProps = React.ComponentProps<"nav">;
-const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
-  ...props
-}) => {
-  const breadcrumbs = useBreadcrumbNavigation();
+const Breadcrumbs: React.FC<BreadcrumbNavigationProps> = ({ ...props }) => {
+  const breadcrumbs = useBreadcrumbs();
 
   return (
     <Breadcrumb {...props}>
@@ -48,4 +46,4 @@ const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
     </Breadcrumb>
   );
 };
-export default BreadcrumbNavigation;
+export default Breadcrumbs;

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BookUser } from "lucide-react";
-import React from "react";
+import SidebarFooterItem from "~/components/sidebar/sidebar-footer-item";
 import {
   Sidebar,
   SidebarContent,
@@ -11,8 +11,6 @@ import {
 } from "~/components/ui/sidebar";
 
 const PrivateSidebar = () => {
-  const { SidebarFooterItem } = resources;
-
   return (
     <Sidebar>
       <SidebarHeader></SidebarHeader>
@@ -33,9 +31,3 @@ const PrivateSidebar = () => {
   );
 };
 export default PrivateSidebar;
-
-const resources = {
-  SidebarFooterItem: React.lazy(
-    () => import("~/components/sidebar/sidebar-footer-item"),
-  ),
-};
