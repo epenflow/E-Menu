@@ -1,24 +1,22 @@
 import Breadcrumbs from "~/components/breadcrumbs";
+import { Card, CardContent, CardHeader, CardOuter } from "~/components/ui/card";
 import Pattern from "~/components/ui/pattern";
-import {
-  SignInCard,
-  SignInCardContent,
-  SignInCardHeader,
-} from "./sign-in-card";
 import SignInForm from "./sign-in-form";
 
 const SignIn = () => {
   return (
-    <main className="min-h-dvh h-full w-full inline-flex items-center justify-center relative bg-background">
+    <main className="relative min-h-dvh w-full flex">
       <Pattern pattern="polka" />
-      <SignInCard>
-        <SignInCardHeader>
-          <Breadcrumbs />
-        </SignInCardHeader>
-        <SignInCardContent>
-          <SignInForm />
-        </SignInCardContent>
-      </SignInCard>
+      <CardOuter className="relative z-10 max-w-xs md:max-w-sm w-full m-auto">
+        <Card>
+          <CardHeader>
+            <Breadcrumbs />
+          </CardHeader>
+          <CardContent>
+            <SignInForm />
+          </CardContent>
+        </Card>
+      </CardOuter>
     </main>
   );
 };

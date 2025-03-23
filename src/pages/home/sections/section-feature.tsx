@@ -1,5 +1,6 @@
 import { ListOrdered, Menu, Wallet, type LucideIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
+import { CardOuter } from "~/components/ui/card";
 import Pattern from "~/components/ui/pattern";
 import { Block, Heading, Text } from "~/components/ui/typography";
 import For from "~/components/utils/for";
@@ -28,9 +29,9 @@ const SectionFeature = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 relative z-10">
           <For each={features}>
             {(feature, key) => (
-              <div
+              <CardOuter
                 key={key}
-                className={cn("bg-accent p-2 border relative", {
+                className={cn("rounded-none", {
                   "md:border-x-0 md:border-y":
                     Math.floor(features.length / 2) === key,
                   "border-y-0": Math.floor(features.length / 2) === key,
@@ -45,7 +46,7 @@ const SectionFeature = () => {
                   </Heading>
                   <Text>{feature.description}</Text>
                 </Block>
-              </div>
+              </CardOuter>
             )}
           </For>
         </div>
