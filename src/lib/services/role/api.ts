@@ -31,7 +31,7 @@ export const allRoleQueryFn = async (
 
 export const roleQueryKey = createQueryKeys("role", {
   all: (ctx: PaginationSchema) => ({
-    queryKey: [ctx.page],
+    queryKey: [ctx],
     queryFn: allRoleQueryFn,
   }),
 });

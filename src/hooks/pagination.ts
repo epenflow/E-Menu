@@ -24,11 +24,15 @@ const usePagination = (
   routeId: RouteGen.FileRouteTypes["id"],
   paginator: Paginator,
 ): {
+  limit: number;
+  onLimitChange: (value: string) => void;
   hasNextPage: boolean;
   hasPrevPage: boolean;
   setOrder: OrderFunction;
   onNextPage: EventFunction;
   onPrevPage: EventFunction;
+  onFirstPage: EventFunction;
+  onLastPage: EventFunction;
 } => {
   const routeApi = React.useMemo(() => getRouteApi(routeId), [routeId]);
   const search = routeApi.useSearch();
@@ -58,6 +62,18 @@ const usePagination = (
     [navigate],
   );
 
+  const onLimitChange = React.useCallback(
+    (value: string) => {
+      navigate({
+        search: () => ({
+          page: pagination.page,
+          limit: Number(value),
+        }),
+      });
+    },
+    [pagination.page, navigate],
+  );
+
   const onNextPage = useEventCallback(
     <T = HTMLElement>(e: React.MouseEvent<T>) => {
       e.preventDefault();
@@ -65,6 +81,7 @@ const usePagination = (
       navigate({
         search: () => ({
           page: hasNextPage ? paginator.lastPage : pagination.page + 1,
+          limit: pagination.limit,
         }),
       });
     },
@@ -77,17 +94,48 @@ const usePagination = (
       navigate({
         search: () => ({
           page: hasPrevPage ? paginator.firstPage : pagination.page - 1,
+          limit: pagination.limit,
+        }),
+      });
+    },
+  );
+
+  const onFirstPage = useEventCallback(
+    <T = HTMLElement>(e: React.MouseEvent<T>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      navigate({
+        search: () => ({
+          page: paginator.firstPage,
+          limit: pagination.limit,
+        }),
+      });
+    },
+  );
+
+  const onLastPage = useEventCallback(
+    <T = HTMLElement>(e: React.MouseEvent<T>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      navigate({
+        search: () => ({
+          page: paginator.lastPage,
+          limit: pagination.limit,
         }),
       });
     },
   );
 
   return {
+    limit: pagination.limit,
+    onLimitChange,
     hasNextPage,
     hasPrevPage,
     setOrder,
     onNextPage,
     onPrevPage,
+    onFirstPage,
+    onLastPage,
   };
 };
 export default usePagination;

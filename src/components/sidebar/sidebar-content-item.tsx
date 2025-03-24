@@ -1,10 +1,11 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   Calendar,
   Inbox,
   LayoutDashboard,
   Search,
   Settings,
+  User,
   type LucideIcon,
 } from "lucide-react";
 import type { FileRouteTypes } from "~/routeTree.gen";
@@ -20,6 +21,7 @@ import For from "../utils/for";
 
 const SidebarContentItem = () => {
   const { contents } = resources;
+  const location = useLocation();
 
   return (
     <SidebarGroup>
@@ -30,7 +32,10 @@ const SidebarContentItem = () => {
             each={contents}
             children={(content, key) => (
               <SidebarMenuItem key={`${key}-${content.title}`}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={content.title}
+                  isActive={location.pathname === content.to}>
                   <Link to={content.to}>
                     <content.icon />
                     <span>{content.title}</span>
@@ -54,18 +59,23 @@ const resources = {
       icon: LayoutDashboard,
     },
     {
+      title: "User",
+      to: "/role",
+      icon: User,
+    },
+    {
       title: "Inbox",
-      to: "/dashboard",
+      to: "/",
       icon: Inbox,
     },
     {
       title: "Calendar",
-      to: "/dashboard",
+      to: "/",
       icon: Calendar,
     },
     {
       title: "Search",
-      to: "/dashboard",
+      to: "/",
       icon: Search,
     },
     {

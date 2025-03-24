@@ -6,8 +6,8 @@ import PrivateSidebar from "./private/private-sidebar";
 const PrivateLayout = () => {
   return (
     <SidebarProvider variant="inset">
-      <PrivateSidebar />
-      <SidebarInset className="overflow-x-auto">
+      <PrivateSidebar collapsible="icon" />
+      <SidebarInset className="overflow-hidden">
         <PrivateHeader />
         <Outlet />
       </SidebarInset>

@@ -4,11 +4,12 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  type SidebarProps,
 } from "~/components/ui/sidebar";
 
-const PrivateSidebar = () => {
+const PrivateSidebar = ({ ...props }: SidebarProps) => {
   return (
-    <Sidebar>
+    <Sidebar {...props}>
       <SidebarContent>
         <SidebarContentItem />
       </SidebarContent>

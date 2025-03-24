@@ -2,7 +2,7 @@
 import React from "react";
 
 type LazyProps<T extends React.ComponentType<any>> = {
-  load: () => Promise<{ default: T }>;
+  load: Promise<{ default: T }>;
   fallback?: React.ReactNode;
 } & React.ComponentProps<T>;
 
@@ -11,7 +11,7 @@ const LazySuspense = <T extends React.ComponentType<any>>({
   fallback,
   ...props
 }: LazyProps<T>) => {
-  const Load = React.useMemo(() => React.lazy(load), [load]);
+  const Load = React.useMemo(() => React.lazy(() => load), [load]);
 
   return (
     <React.Suspense fallback={fallback}>

@@ -139,17 +139,17 @@ function SidebarProvider({
     </SidebarContext.Provider>
   );
 }
-
+export type SidebarProps = React.ComponentProps<"div"> & {
+  side?: "left" | "right";
+  collapsible?: "offcanvas" | "icon" | "none";
+};
 function Sidebar({
   side = "left",
   collapsible = "offcanvas",
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> & {
-  side?: "left" | "right";
-  collapsible?: "offcanvas" | "icon" | "none";
-}) {
+}: SidebarProps) {
   const { isMobile, state, openMobile, setOpenMobile, variant } = useSidebar();
 
   if (collapsible === "none") {

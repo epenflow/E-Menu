@@ -21,8 +21,10 @@ const SidebarFooterItem = () => {
   const userInfoToJsx = React.useMemo(
     () => (
       <>
-        <Avatar>
-          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
+        <Avatar className="rounded-md">
+          <AvatarFallback className="rounded-md">
+            {getInitials(user?.name)}
+          </AvatarFallback>
         </Avatar>
         <div className="grid flex-1 text-left text-sm leading-tight text-foreground">
           {user ? (
@@ -72,7 +74,7 @@ const SidebarFooterItem = () => {
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton>
+            <SidebarMenuButton size="lg" tooltip={"Account"}>
               {userInfoToJsx}
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -80,7 +82,9 @@ const SidebarFooterItem = () => {
 
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            align="end">
+            align="end"
+            side="bottom"
+            sideOffset={4}>
             {dropdownMenuContentToJsx}
           </DropdownMenuContent>
         </DropdownMenu>
