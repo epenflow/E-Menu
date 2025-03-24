@@ -17,4 +17,5 @@ const DataTableContainer: React.FC<DataTableContainer> = ({
     </ScrollArea>
   );
 };
+
 export default DataTableContainer;

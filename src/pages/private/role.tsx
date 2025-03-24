@@ -1,23 +1,21 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRouteApi } from "@tanstack/react-router";
-import { PlusIcon } from "lucide-react";
 import DataTable from "~/components/data-table/data-table";
 import DataTableContainer from "~/components/data-table/data-table-container";
 import DataTablePagination from "~/components/data-table/data-table-pagination";
-import { Button } from "~/components/ui/button";
+import { DataTableProvider } from "~/components/data-table/data-table-provider";
 import { Block, Heading, Text } from "~/components/ui/typography";
+import useFilters from "~/hooks/filters";
 import PrivateContainer from "~/layouts/private/private-container";
 import { allRoleQueryOptions, roleColumns } from "~/lib/services/role";
 import type { Role } from "~/lib/types";
 import type { FileRouteTypes } from "~/routeTree.gen";
 
 const routeId: FileRouteTypes["id"] = "/_private/role";
-const route = getRouteApi(routeId);
 const Role = () => {
-  const search = route.useSearch();
+  const { onPaginationChange, filters, paginationState } = useFilters(routeId);
   const {
     data: { data: pagination },
-  } = useSuspenseQuery(allRoleQueryOptions(search));
+  } = useSuspenseQuery(allRoleQueryOptions(filters));
 
   return (
     <PrivateContainer>
@@ -28,20 +26,20 @@ const Role = () => {
           </Heading>
           <Text>Manage user roles and permissions within the application.</Text>
         </Block>
-        <div className="flex flex-col gap-2">
-          <div>
-            <Button size="sm" variant="ghost" className="border border-dashed">
-              <PlusIcon />
-              <span>New Role</span>
-            </Button>
+
+        <DataTableProvider
+          data={pagination.items}
+          columns={roleColumns}
+          state={{ pagination: paginationState }}
+          onPaginationChange={onPaginationChange}
+          rowCount={pagination.meta.total}>
+          <div className="flex flex-col gap-2">
+            <DataTableContainer>
+              <DataTable />
+            </DataTableContainer>
+            <DataTablePagination />
           </div>
-
-          <DataTableContainer>
-            <DataTable data={pagination.items} columns={roleColumns} />
-          </DataTableContainer>
-
-          <DataTablePagination routeId={routeId} meta={pagination.meta} />
-        </div>
+        </DataTableProvider>
       </div>
     </PrivateContainer>
   );

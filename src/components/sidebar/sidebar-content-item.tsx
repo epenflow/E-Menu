@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import {
+  Book,
   Calendar,
   Inbox,
   LayoutDashboard,
@@ -57,6 +58,11 @@ const resources = {
       title: "Dashboard",
       to: "/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      title: "Book",
+      to: "/book",
+      icon: Book,
     },
     {
       title: "User",

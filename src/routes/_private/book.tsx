@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { filterSchema } from "~/hooks/filters";
-import { allRoleQueryOptions } from "~/lib/services/role";
+import { bookOptions } from "~/lib/services/book";
 
-export const Route = createFileRoute("/_private/role")({
+export const Route = createFileRoute("/_private/book")({
   validateSearch: zodValidator(filterSchema),
   loaderDeps: (deps) => deps,
   loader: ({ deps, context }) => {
-    return context.query.ensureQueryData(allRoleQueryOptions(deps.search));
+    return context.query.ensureQueryData(bookOptions(deps.search));
   },
 });

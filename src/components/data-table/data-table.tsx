@@ -1,6 +1,5 @@
-import { flexRender, type ColumnDef } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import React from "react";
-import { useDataTable } from "~/hooks/data-table";
 import { cn } from "~/lib/utils";
 import {
   Table,
@@ -12,25 +11,17 @@ import {
 } from "../ui/table";
 import For from "../utils/for";
 import LazySuspense from "../utils/lazy-suspense";
+import { useDataTableContext } from "./data-table-context";
 
-type DataTableProps<T> = {
+type DataTableProps = {
   isDevtools?: boolean;
-  data: T[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: ColumnDef<T, any>[];
 } & React.ComponentProps<"table">;
-const DataTable = <T,>({
-  data,
-  columns,
+const DataTable: React.FC<DataTableProps> = ({
   isDevtools,
   className,
-
   ...props
-}: DataTableProps<T>) => {
-  const table = useDataTable({
-    data,
-    columns,
-  });
+}) => {
+  const table = useDataTableContext();
 
   const tableDevtoolsToJsx = React.useMemo(
     () =>
@@ -99,7 +90,9 @@ const DataTable = <T,>({
             />
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>

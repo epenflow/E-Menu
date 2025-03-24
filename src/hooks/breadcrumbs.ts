@@ -27,6 +27,10 @@ const breadcrumbRoutes: Partial<
     { title: "Home", to: "/" },
     { title: "Sign-In", isPage: true },
   ],
+  "/book": [
+    { title: "Dashboard", to: "/dashboard" },
+    { title: "Book", isPage: true },
+  ],
 };
 const useBreadcrumbs = () => {
   const { pathname } = useLocation();

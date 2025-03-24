@@ -22,10 +22,12 @@ export const useDataTableContext = () => {
   return context;
 };
 
-type UseDataTableProps<T> = Omit<TableOptions<T>, "getCoreRowModel">;
+export type UseDataTableProps<T> = Omit<TableOptions<T>, "getCoreRowModel">;
 export const useDataTable = <T>(props: UseDataTableProps<T>) => {
   return useReactTable({
     ...props,
     getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    autoResetPageIndex: false,
   });
 };
