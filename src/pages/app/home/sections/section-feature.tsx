@@ -7,7 +7,6 @@ import For from "~/components/utils/for";
 import ContainerLayout, {
   ContainerInnerLayout,
 } from "~/layouts/container-layout";
-import { cn } from "~/lib/utils";
 
 const SectionFeature = () => {
   const { features } = resources;
@@ -26,16 +25,10 @@ const SectionFeature = () => {
           </Text>
         </Block>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 relative z-10">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 relative z-10">
           <For each={features}>
             {(feature, key) => (
-              <CardOuter
-                key={key}
-                className={cn("rounded-none", {
-                  "md:border-x-0 md:border-y":
-                    Math.floor(features.length / 2) === key,
-                  "border-y-0": Math.floor(features.length / 2) === key,
-                })}>
+              <CardOuter key={key}>
                 <Block className="bg-card px-6 py-12 h-full rounded-md border">
                   <Block className="flex-row items-center">
                     <feature.icon />

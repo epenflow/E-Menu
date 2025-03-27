@@ -18,10 +18,10 @@ const Password = () => {
       <div className="max-w-xl space-y-6">
         <Block className="gap-1 mb-6">
           <Heading level={3} className="font-medium">
-            Update profile
+            Change Password
           </Heading>
           <Text>
-            Update your account's profile information and email address.
+            Ensure your account is using a long, random password to stay secure.
           </Text>
         </Block>
 

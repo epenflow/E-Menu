@@ -68,3 +68,10 @@ export const isTokenExpires = (expiresAt?: Date | null) => {
   }
   return true;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const withLazy: <T extends React.ComponentType<any>>(
+  loader: Promise<{ default: T }>,
+) => React.LazyExoticComponent<T> = (loader) => {
+  return React.lazy(() => loader);
+};

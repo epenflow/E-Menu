@@ -1,31 +1,31 @@
 import { createFormHook } from "@tanstack/react-form";
-import React from "react";
+import { withLazy } from "~/lib/utils";
 import { fieldContext, formContext } from "./form-hook-context";
 
 const fieldComponents = {
-  FormFieldItem: React.lazy(
-    () => import("~/components/form/form-field/form-field-item"),
+  FormFieldItem: withLazy(
+    import("~/components/form/form-field/form-field-item"),
   ),
-  FormFieldControl: React.lazy(
-    () => import("~/components/form/form-field/form-field-control"),
+  FormFieldControl: withLazy(
+    import("~/components/form/form-field/form-field-control"),
   ),
-  FormFieldControlIcon: React.lazy(
-    () => import("~/components/form/form-field/form-field-control-icon"),
+  FormFieldControlIcon: withLazy(
+    import("~/components/form/form-field/form-field-control-icon"),
   ),
-  FormFieldDescription: React.lazy(
-    () => import("~/components/form/form-field/form-field-description"),
+  FormFieldDescription: withLazy(
+    import("~/components/form/form-field/form-field-description"),
   ),
-  FormFieldLabel: React.lazy(
-    () => import("~/components/form/form-field/form-field-label"),
+  FormFieldLabel: withLazy(
+    import("~/components/form/form-field/form-field-label"),
   ),
-  FormFieldMessage: React.lazy(
-    () => import("~/components/form/form-field/form-field-message"),
+  FormFieldMessage: withLazy(
+    import("~/components/form/form-field/form-field-message"),
   ),
 };
 
 const formComponents = {
-  FormMessage: React.lazy(() => import("~/components/form/form-message")),
-  FormButton: React.lazy(() => import("~/components/form/form-button")),
+  FormMessage: withLazy(import("~/components/form/form-message")),
+  FormButton: withLazy(import("~/components/form/form-button")),
 };
 
 export const { useAppForm, withForm } = createFormHook({
