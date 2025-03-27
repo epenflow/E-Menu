@@ -1,7 +1,7 @@
 import { AxiosError, HttpStatusCode } from "axios";
 import React from "react";
-import { useAuth } from "~/lib/services/auth";
 import type { ApiErrorResponse } from "~/lib/types";
+import { useAuth } from "~/services/auth";
 
 export const useFormHookError = () => {
   const { deleteUserCredentials } = useAuth();

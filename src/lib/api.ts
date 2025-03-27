@@ -4,7 +4,7 @@ import axios, {
   type Method,
   type RawAxiosRequestHeaders,
 } from "axios";
-import { getUserCredentials } from "./services/auth";
+import { getUserCredentials } from "../services/auth";
 
 export const baseURL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";

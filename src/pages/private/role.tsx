@@ -6,9 +6,9 @@ import { DataTableProvider } from "~/components/data-table/data-table-provider";
 import { Block, Heading, Text } from "~/components/ui/typography";
 import useFilters from "~/hooks/filters";
 import PrivateContainer from "~/layouts/private/private-container";
-import { allRoleQueryOptions, roleColumns } from "~/lib/services/role";
 import type { Role } from "~/lib/types";
 import type { FileRouteTypes } from "~/routeTree.gen";
+import { allRoleQueryOptions, roleColumns } from "~/services/role";
 
 const routeId: FileRouteTypes["id"] = "/_private/role";
 const Role = () => {

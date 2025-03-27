@@ -1,14 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import {
-  Book,
-  Calendar,
-  Inbox,
-  LayoutDashboard,
-  Search,
-  Settings,
-  User,
-  type LucideIcon,
-} from "lucide-react";
+import { LayoutDashboard, Table2, type LucideIcon } from "lucide-react";
 import type { FileRouteTypes } from "~/routeTree.gen";
 import {
   SidebarGroup,
@@ -60,34 +51,9 @@ const resources = {
       icon: LayoutDashboard,
     },
     {
-      title: "Book",
-      to: "/book",
-      icon: Book,
-    },
-    {
-      title: "User",
-      to: "/role",
-      icon: User,
-    },
-    {
-      title: "Inbox",
-      to: "/",
-      icon: Inbox,
-    },
-    {
-      title: "Calendar",
-      to: "/",
-      icon: Calendar,
-    },
-    {
-      title: "Search",
-      to: "/",
-      icon: Search,
-    },
-    {
-      title: "Settings",
-      to: "/settings/profile",
-      icon: Settings,
+      title: "Dining Table",
+      to: "/dining-table",
+      icon: Table2,
     },
   ] satisfies {
     title: string;

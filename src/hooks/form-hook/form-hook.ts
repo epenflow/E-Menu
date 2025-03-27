@@ -26,6 +26,7 @@ const fieldComponents = {
 const formComponents = {
   FormMessage: withLazy(import("~/components/form/form-message")),
   FormButton: withLazy(import("~/components/form/form-button")),
+  FormContainer: withLazy(import("~/components/form/form-container")),
 };
 
 export const { useAppForm, withForm } = createFormHook({

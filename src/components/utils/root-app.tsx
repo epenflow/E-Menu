@@ -3,7 +3,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import React from "react";
 import query from "~/lib/query";
 import router from "~/lib/router";
-import { AuthContextProvider, useAuth } from "~/lib/services/auth";
+import { AuthContextProvider, useAuth } from "~/services/auth";
 
 const RouterWithContext = () => {
   const auth = useAuth();

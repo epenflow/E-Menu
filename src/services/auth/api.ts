@@ -1,5 +1,5 @@
 import type { ApiSuccessResponse } from "~/lib/types";
-import api, { apiConfigWithCredentials } from "../../api";
+import api, { apiConfigWithCredentials } from "../../lib/api";
 import type { SignInResponse, SignInSchema } from "./type";
 
 export const apiSignIn = async (props: SignInSchema) => {

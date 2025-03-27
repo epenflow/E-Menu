@@ -2,7 +2,7 @@ import { Lock, User, type LucideIcon } from "lucide-react";
 import { Input, InputPassword } from "~/components/ui/input";
 import For from "~/components/utils/for";
 import { useFormHookOnSubmit } from "~/hooks/form-hook";
-import { useSignInForm, type SignInFieldSchema } from "~/lib/services/auth";
+import { useSignInForm, type SignInFieldSchema } from "~/services/auth";
 
 const SignInForm = () => {
   const { signInField } = resources;

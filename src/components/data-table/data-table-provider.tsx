@@ -8,6 +8,8 @@ export const DataTableProvider = <T,>({
 }: DataTableProviderProps<T>) => {
   const table = useDataTable({
     ...props,
+    manualPagination: true,
+    autoResetPageIndex: false,
   });
 
   return <DataTableContext value={table}>{children}</DataTableContext>;

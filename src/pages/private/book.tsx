@@ -5,9 +5,9 @@ import DataTablePagination from "~/components/data-table/data-table-pagination";
 import { DataTableProvider } from "~/components/data-table/data-table-provider";
 import useFilters from "~/hooks/filters";
 import PrivateContainer from "~/layouts/private/private-container";
-import { bookOptions } from "~/lib/services/book";
-import { bookColumns } from "~/lib/services/book/column";
 import type { FileRouteTypes } from "~/routeTree.gen";
+import { bookOptions } from "~/services/book";
+import { bookColumns } from "~/services/book/column";
 
 const routeId: FileRouteTypes["id"] = "/_private/book";
 const Book = () => {
@@ -26,7 +26,7 @@ const Book = () => {
         onPaginationChange={onPaginationChange}>
         <div className="flex flex-col gap-2">
           <DataTableContainer>
-            <DataTable />
+            <DataTable isDevtools />
           </DataTableContainer>
           <DataTablePagination />
         </div>

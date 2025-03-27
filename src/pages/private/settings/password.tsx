@@ -6,7 +6,7 @@ import SettingsLayout from "~/layouts/settings-layout";
 import {
   useUpdatePasswordForm,
   type UpdatePasswordSchemaField,
-} from "~/lib/services/profile";
+} from "~/services/profile";
 
 const Password = () => {
   const { updatePasswordFields } = resources;

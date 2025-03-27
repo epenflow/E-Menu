@@ -6,7 +6,7 @@ import SettingsLayout from "~/layouts/settings-layout";
 import {
   useUpdateProfileForm,
   type UpdateProfileSchemaField,
-} from "~/lib/services/profile";
+} from "~/services/profile";
 
 const Profile = () => {
   const { userInfoFields, userCredentialFields } = resources;

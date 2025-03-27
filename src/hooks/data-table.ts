@@ -27,7 +27,5 @@ export const useDataTable = <T>(props: UseDataTableProps<T>) => {
   return useReactTable({
     ...props,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    autoResetPageIndex: false,
   });
 };

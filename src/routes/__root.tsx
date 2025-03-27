@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext } from "@tanstack/react-router";
-import type { AuthContextValues } from "~/lib/services/auth";
 import RootPage from "~/pages/root-page";
+import type { AuthContextValues } from "~/services/auth";
 
 type RouteContext = {
   query: QueryClient;

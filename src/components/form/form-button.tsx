@@ -16,7 +16,11 @@ const FormButton: React.FC<FormButtonProps> = ({ children, ...props }) => {
     <form.Subscribe
       selector={(state) => [state.canSubmit, state.isSubmitting]}
       children={([canSubmit, isSubmitting]) => (
-        <Button disabled={!canSubmit} isPending={isSubmitting} {...props}>
+        <Button
+          type="submit"
+          disabled={!canSubmit}
+          isPending={isSubmitting}
+          {...props}>
           {children({ isPending: isSubmitting })}
         </Button>
       )}

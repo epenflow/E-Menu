@@ -17,7 +17,7 @@ import { Route as PrivateImport } from './routes/_private'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AppImport } from './routes/_app'
 import { Route as AppIndexImport } from './routes/_app/index'
-import { Route as PrivateRoleImport } from './routes/_private/role'
+import { Route as PrivateDiningTableImport } from './routes/_private/dining-table'
 import { Route as PrivateBookImport } from './routes/_private/book'
 
 // Create Virtual Routes
@@ -68,11 +68,11 @@ const AuthSignInLazyRoute = AuthSignInLazyImport.update({
   getParentRoute: () => AuthRoute,
 } as any).lazy(() => import('./routes/_auth/sign-in.lazy').then((d) => d.Route))
 
-const PrivateRoleRoute = PrivateRoleImport.update({
-  id: '/role',
-  path: '/role',
+const PrivateDiningTableRoute = PrivateDiningTableImport.update({
+  id: '/dining-table',
+  path: '/dining-table',
   getParentRoute: () => PrivateRoute,
-} as any).lazy(() => import('./routes/_private/role.lazy').then((d) => d.Route))
+} as any)
 
 const PrivateBookRoute = PrivateBookImport.update({
   id: '/book',
@@ -131,11 +131,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateBookImport
       parentRoute: typeof PrivateImport
     }
-    '/_private/role': {
-      id: '/_private/role'
-      path: '/role'
-      fullPath: '/role'
-      preLoaderRoute: typeof PrivateRoleImport
+    '/_private/dining-table': {
+      id: '/_private/dining-table'
+      path: '/dining-table'
+      fullPath: '/dining-table'
+      preLoaderRoute: typeof PrivateDiningTableImport
       parentRoute: typeof PrivateImport
     }
     '/_auth/sign-in': {
@@ -200,7 +200,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface PrivateRouteChildren {
   PrivateBookRoute: typeof PrivateBookRoute
-  PrivateRoleRoute: typeof PrivateRoleRoute
+  PrivateDiningTableRoute: typeof PrivateDiningTableRoute
   PrivateDashboardLazyRoute: typeof PrivateDashboardLazyRoute
   PrivateSettingsPasswordLazyRoute: typeof PrivateSettingsPasswordLazyRoute
   PrivateSettingsProfileLazyRoute: typeof PrivateSettingsProfileLazyRoute
@@ -208,7 +208,7 @@ interface PrivateRouteChildren {
 
 const PrivateRouteChildren: PrivateRouteChildren = {
   PrivateBookRoute: PrivateBookRoute,
-  PrivateRoleRoute: PrivateRoleRoute,
+  PrivateDiningTableRoute: PrivateDiningTableRoute,
   PrivateDashboardLazyRoute: PrivateDashboardLazyRoute,
   PrivateSettingsPasswordLazyRoute: PrivateSettingsPasswordLazyRoute,
   PrivateSettingsProfileLazyRoute: PrivateSettingsProfileLazyRoute,
@@ -220,7 +220,7 @@ const PrivateRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof PrivateRouteWithChildren
   '/book': typeof PrivateBookRoute
-  '/role': typeof PrivateRoleRoute
+  '/dining-table': typeof PrivateDiningTableRoute
   '/sign-in': typeof AuthSignInLazyRoute
   '/dashboard': typeof PrivateDashboardLazyRoute
   '/': typeof AppIndexRoute
@@ -231,7 +231,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof PrivateRouteWithChildren
   '/book': typeof PrivateBookRoute
-  '/role': typeof PrivateRoleRoute
+  '/dining-table': typeof PrivateDiningTableRoute
   '/sign-in': typeof AuthSignInLazyRoute
   '/dashboard': typeof PrivateDashboardLazyRoute
   '/': typeof AppIndexRoute
@@ -245,7 +245,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_private': typeof PrivateRouteWithChildren
   '/_private/book': typeof PrivateBookRoute
-  '/_private/role': typeof PrivateRoleRoute
+  '/_private/dining-table': typeof PrivateDiningTableRoute
   '/_auth/sign-in': typeof AuthSignInLazyRoute
   '/_private/dashboard': typeof PrivateDashboardLazyRoute
   '/_app/': typeof AppIndexRoute
@@ -258,7 +258,7 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/book'
-    | '/role'
+    | '/dining-table'
     | '/sign-in'
     | '/dashboard'
     | '/'
@@ -268,7 +268,7 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/book'
-    | '/role'
+    | '/dining-table'
     | '/sign-in'
     | '/dashboard'
     | '/'
@@ -280,7 +280,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_private'
     | '/_private/book'
-    | '/_private/role'
+    | '/_private/dining-table'
     | '/_auth/sign-in'
     | '/_private/dashboard'
     | '/_app/'
@@ -332,7 +332,7 @@ export const routeTree = rootRoute
       "filePath": "_private.tsx",
       "children": [
         "/_private/book",
-        "/_private/role",
+        "/_private/dining-table",
         "/_private/dashboard",
         "/_private/settings/password",
         "/_private/settings/profile"
@@ -342,8 +342,8 @@ export const routeTree = rootRoute
       "filePath": "_private/book.tsx",
       "parent": "/_private"
     },
-    "/_private/role": {
-      "filePath": "_private/role.tsx",
+    "/_private/dining-table": {
+      "filePath": "_private/dining-table.tsx",
       "parent": "/_private"
     },
     "/_auth/sign-in": {

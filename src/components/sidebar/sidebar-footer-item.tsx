@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
 import React from "react";
-import { useAuth } from "~/lib/services/auth";
 import { getInitials } from "~/lib/utils";
+import { useAuth } from "~/services/auth";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import {
   DropdownMenu,
